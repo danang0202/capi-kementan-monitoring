@@ -42,13 +42,13 @@ const Navbar: React.FC = () => {
             <Link to="/">Dashboard</Link>
           </li>
           <li>
-            <Link to="/">Progress Cacah</Link>
+            <Link to="/progress">Progress Cacah</Link>
           </li>
           <li>
-            <Link to="/">Hasil Cacah</Link>
+            <Link to="/hasil">Hasil Cacah</Link>
           </li>
           <li>
-            <Link to="/">FAQ</Link>
+            <Link to="/faq">FAQ</Link>
           </li>
         </ul>
       </div>
