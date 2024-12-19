@@ -8,19 +8,19 @@ export default {
     themes: [
       {
         mytheme: {
-          primary: '#4ade80',
+          primary: '#00837e',
 
-          secondary: '#00837e',
+          secondary: '#ccfbf1',
 
-          accent: '#a16207',
+          accent: '#eab308',
 
           neutral: '#080a06',
 
           'base-100': '#fff7ff',
 
-          info: '#00b5ff',
+          info: '#1d4ed8',
 
-          success: '#008f00',
+          success: '#4ade80',
 
           warning: '#eab308',
 

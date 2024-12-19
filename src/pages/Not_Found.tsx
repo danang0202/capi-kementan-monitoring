@@ -5,9 +5,9 @@ const NotFound: React.FC = () => {
   return (
     <div className="text-center p-4">
       <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
-      <p>The page you're looking for doesn't exist.</p>
+      <p>Halaman yang anda cari tidak ada.</p>
       <Link to="/" className="btn btn-primary mt-4">
-        Go Back Home
+        Kembali ke Dashboard
       </Link>
     </div>
   );
