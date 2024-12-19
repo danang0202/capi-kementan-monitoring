@@ -1,47 +1,129 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TableComponent from '../components/Table';
-import ProgressBar from '../components/ProgressBar';
-import { Progress as ProgressDataSource } from '../data/Progress';
-import { FaArchive, FaCheckCircle, FaWindowClose } from 'react-icons/fa';
+import { FaArchive, FaArrowRight, FaCheckCircle, FaEye, FaWindowClose } from 'react-icons/fa';
 import { MdEditDocument, MdReportProblem, MdSend } from 'react-icons/md';
+import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
+import { LuRefreshCcw } from 'react-icons/lu';
 
-interface ProgressData {
-  name: string;
-  value: number;
-  max: number;
-}
-
-interface ProgressItem {
-  nomer: number;
-  data: ProgressData;
+interface SubmissionData {
+  id: number;
+  timestamp: string;
+  submitter: string;
+  labelRumahTangga: string;
+  status: string;
 }
 
 const Hasil: React.FC = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'No',
-        accessor: 'nomer', // Nomor otomatis
-      },
-      {
-        Header: 'Nama',
-        accessor: 'data.name', // Nama dari data
-      },
-      {
-        Header: 'Progress',
-        Cell: ({ row }: { row: { original: ProgressItem } }) => {
-          const { value, max } = row.original.data;
-          return <ProgressBar value={value} max={max} label={true} percentage={true} />;
-        },
-      },
-    ],
-    []
-  );
+  // Data awal
+  const [data, setData] = useState<SubmissionData[]>([
+    {
+      id: 1,
+      timestamp: '3 Mar 2024, 06:15:51',
 
-  const data: ProgressItem[] = ProgressDataSource.map((item, index) => ({
-    nomer: index + 1, // Nomor otomatis
-    data: item.data,
-  }));
+      submitter: 'IRSYAD FADHIL ASYRAF',
+      labelRumahTangga: 'PEMECUTAN_KLOD.064B.33',
+      status: 'Ditolak',
+    },
+    {
+      id: 2,
+      timestamp: '3 Mar 2024, 01:22:35',
+
+      submitter: 'IRSYAD FADHIL ASYRAF',
+      labelRumahTangga: 'KARANGASEM.002B.14',
+      status: 'Diterima',
+    },
+    {
+      id: 3,
+      timestamp: '3 Mar 2024, 01:22:35',
+
+      submitter: 'IRSYAD FADHIL ASYRAF',
+      labelRumahTangga: 'KARANGASEM.002B.14',
+      status: 'Diterima',
+    },
+    {
+      id: 4,
+      timestamp: '3 Mar 2024, 01:22:35',
+
+      submitter: 'IRSYAD FADHIL ASYRAF',
+      labelRumahTangga: 'KARANGASEM.002B.14',
+      status: 'Diterima',
+    },
+  ]);
+
+  // Fungsi untuk mendapatkan kelas warna berdasarkan status
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case 'Diterima':
+        return 'btn-info';
+      case 'Bermasalah':
+      case 'Diubah':
+        return 'btn-warning';
+      case 'Ditolak':
+        return 'btn-error';
+      case 'Diapprove':
+        return 'btn-success text-white';
+      default:
+        return 'btn-ghost';
+    }
+  };
+
+  // Fungsi untuk mengubah status
+  const handleStatusChange = (id: number, newStatus: string) => {
+    const updatedData = data.map((item) => (item.id === id ? { ...item, status: newStatus } : item));
+    setData(updatedData);
+  };
+
+  // Definisi kolom untuk `react-table`
+  const columns: Column<SubmissionData>[] = [
+    {
+      Header: 'Timestamp',
+      accessor: 'timestamp',
+    },
+
+    {
+      Header: 'Submitter',
+      accessor: 'submitter',
+    },
+    {
+      Header: 'Label Rumah Tangga',
+      accessor: 'labelRumahTangga',
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      Cell: ({ row }: any) => {
+        const { id, status } = row.original;
+        return (
+          <div className={`dropdown dropdown-hover ${id === 1 ? 'dropdown-end' : 'dropdown-top'}`}>
+            <label tabIndex={0} className={`btn ${getStatusClass(status)} btn-sm`}>
+              {status}
+            </label>
+            <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52  overflow-y-auto">
+              {['Diterima', 'Bermasalah', 'Diubah', 'Ditolak', 'Diapprove'].map((newStatus) => (
+                <li key={newStatus}>
+                  <button className="btn btn-ghost btn-sm" onClick={() => handleStatusChange(id, newStatus)}>
+                    {newStatus}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      },
+    },
+    {
+      Header: 'Aksi',
+      accessor: 'id',
+      Cell: ({ row }: any) => {
+        return (
+          <button className="btn btn-sm font-semibold btn-info">
+            Lihat
+            <FaEye className="text-lg" />
+          </button>
+        );
+      },
+    },
+  ];
 
   return (
     <div className="p-8">
@@ -102,7 +184,27 @@ const Hasil: React.FC = () => {
           </div>
         </div>
       </div>
-      <TableComponent<ProgressItem> columns={columns} data={data} />
+
+      <div className="flex justify-between items-center my-2 ">
+        <h1 className="text-info font-semibold text-2xl">Submission Terbaru</h1>
+        <p>
+          <span className="text-primary font-semibold">Last Update</span>
+          &nbsp; &nbsp;
+          {`${GetTanggalIndonesia()}  pukul ${new Date().toLocaleTimeString()}`}
+        </p>
+        <div className="space-x-4">
+          <button className="btn btn-accent ">
+            Refresh <LuRefreshCcw className="text-xl" />
+          </button>
+          <button className="btn btn-info ">
+            Selengkapnya <FaArrowRight className="text-xl" />
+          </button>
+        </div>
+      </div>
+
+      <hr className="w-full border-t-[1.7px] border-slate-300 mb-4" />
+
+      <TableComponent<SubmissionData> columns={columns} data={data} />
     </div>
   );
 };

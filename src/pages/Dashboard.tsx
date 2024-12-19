@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../components/Button';
-import { GetTanggalIndonesia } from '../utils/getDay';
+import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
 import { convertToIndonesianDate } from '../utils/convertDate';
 import { calculateRemainingTime } from '../utils/calculateRemainingTime';
 import { Period } from '../data/period';

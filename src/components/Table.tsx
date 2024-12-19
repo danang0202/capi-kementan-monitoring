@@ -28,7 +28,7 @@ const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
   const { globalFilter, pageIndex } = state;
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto overflow-y-auto">
       {/* Input Pencarian */}
       <div className="flex justify-between">
         <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
