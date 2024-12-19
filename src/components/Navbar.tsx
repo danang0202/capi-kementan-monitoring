@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
           {isDropdownOpen && (
             <ul className="absolute right-0 z-50 dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
               <li>
-                <Link to="/profil" className="flex items-center gap-2" onClick={() => setIsDropdownOpen(false)}>
+                <Link to="/profile" className="flex items-center gap-2" onClick={() => setIsDropdownOpen(false)}>
                   <RiProfileLine className="text-primary" />
                   Profil Saya
                 </Link>
