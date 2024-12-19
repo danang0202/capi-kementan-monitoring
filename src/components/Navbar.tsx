@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="navbar bg-base-100 z-10 shadow-md flex items-center justify-between px-4">
+    <nav className="navbar bg-base-100/90 z-10 shadow-md flex items-center justify-between px-4 fixed top-0">
       <div className="navbar-start">
         <Link to="/" className="text-xl font-bold flex items-center gap-2">
           <img src="/public/logo kementan.png" alt="logo kementan" height={50} width={50} />

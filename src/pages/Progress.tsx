@@ -1,8 +1,65 @@
+import React from 'react';
+import TableComponent from '../components/Table';
+import ProgressBar from '../components/ProgressBar';
+import { Progress as ProgressDataSource } from '../data/Progress';
+
+interface ProgressData {
+  name: string;
+  value: number;
+  max: number;
+}
+
+interface ProgressItem {
+  nomer: number;
+  data: ProgressData;
+}
+
 const Progress: React.FC = () => {
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'No',
+        accessor: 'nomer', // Nomor otomatis
+      },
+      {
+        Header: 'Nama',
+        accessor: 'data.name', // Nama dari data
+      },
+      {
+        Header: 'Progress',
+        Cell: ({ row }: { row: { original: ProgressItem } }) => {
+          const { value, max } = row.original.data;
+          return <ProgressBar value={value} max={max} label={true} percentage={true} />;
+        },
+      },
+    ],
+    []
+  );
+
+  const data: ProgressItem[] = ProgressDataSource.map((item, index) => ({
+    nomer: index + 1, // Nomor otomatis
+    data: item.data,
+  }));
+
   return (
-    <div className="text-center p-4">
-      <h1 className="text-4xl font-bold mb-4">Progress Cacah</h1>
-      <p>Halaman ini sedang dalam pengembangan.</p>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-2">Progress Pencacahan</h1>
+      <div className="breadcrumbs text-sm mb-2">
+        <ul>
+          <li>
+            <a href="/">Dashboard</a>
+          </li>
+          <li>
+            <a href="/progress">Progress Pencacahan</a>
+          </li>
+        </ul>
+      </div>
+      <div className="p-4 space-y-2 rounded-md bg-white shadow-md my-2">
+        <h1 className="font-semibold text-xl ">Progress Keseluruhan </h1>
+        <hr className="w-full border-t-[1.7px] border-slate-300" />
+        <ProgressBar max={100} value={35} label={true} percentage={true} />
+      </div>
+      <TableComponent<ProgressItem> columns={columns} data={data} />
     </div>
   );
 };
