@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Hasil from './pages/Hasil';
 import MainLayout from './layouts/MainLayout';
+import ForgotPassword from './pages/ForgotPassword';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const AppContent: React.FC = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </MainLayout>
