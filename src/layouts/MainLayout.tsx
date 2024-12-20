@@ -9,7 +9,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children, excludeLayout = false }) => {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex flex-col justify-center items-center bg-gray-50">
+    <div className="min-h-screen w-full overflow-x-hidden flex flex-col justify-center items-center bg-gray-50 ">
       {/* Conditionally render Navbar and Footer */}
       {!excludeLayout && <Navbar />}
       <main className="flex-grow md:w-[95%] w-[98%] my-16">{children}</main>
