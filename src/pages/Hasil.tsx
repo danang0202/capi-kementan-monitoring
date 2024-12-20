@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import TableComponent from '../components/Table';
-import { FaArchive, FaArrowRight, FaCheckCircle, FaEye, FaWindowClose } from 'react-icons/fa';
-import { MdEditDocument, MdReportProblem, MdSend } from 'react-icons/md';
+import { FaArrowRight, FaEye } from 'react-icons/fa';
 import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
 import { LuRefreshCcw } from 'react-icons/lu';
 
@@ -116,7 +115,7 @@ const Hasil: React.FC = () => {
       accessor: 'id',
       Cell: ({ row }: any) => {
         return (
-          <button className="btn btn-sm font-semibold btn-info">
+          <button className="btn lg:btn-sm btn-md font-semibold btn-info ">
             Lihat
             <FaEye className="text-lg" />
           </button>
@@ -139,7 +138,7 @@ const Hasil: React.FC = () => {
         </ul>
       </div>
 
-      <div className="flex justify-between items-center my-2 ">
+      <div className="block max-md:space-y-2 md:flex justify-between items-center my-2 ">
         <h1 className="text-info font-semibold text-2xl">Submission Terbaru</h1>
         <p>
           <span className="text-primary font-semibold">Last Update</span>
@@ -147,11 +146,11 @@ const Hasil: React.FC = () => {
           {`${GetTanggalIndonesia()}  pukul ${new Date().toLocaleTimeString()}`}
         </p>
         <div className="space-x-4">
-          <button className="btn btn-accent ">
-            Refresh <LuRefreshCcw className="text-xl" />
+          <button className="btn btn-accent md:text-base text-xs">
+            Refresh <LuRefreshCcw className="md:text-xl text-base" />
           </button>
-          <button className="btn btn-info ">
-            Selengkapnya <FaArrowRight className="text-xl" />
+          <button className="btn btn-info md:text-base text-xs">
+            Selengkapnya <FaArrowRight className="md:text-xl text-base" />
           </button>
         </div>
       </div>

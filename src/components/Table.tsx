@@ -74,27 +74,27 @@ const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
       </table>
 
       {/* Kontrol Pagination */}
-      <div className="flex justify-between items-center mt-4">
+      <div className="xs:flex max-md:space-y-2 mx-auto block justify-between items-center mt-4">
         <div>
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className="bg-primary rounded-md py-2 px-3 text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
             {'<<'}
           </button>
-          <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-primary rounded-md py-2 px-3 text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
             {'<'}
           </button>
-          <button onClick={() => nextPage()} disabled={!canNextPage} className="bg-primary rounded-md py-2 px-3 text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => nextPage()} disabled={!canNextPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
             {'>'}
           </button>
-          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className="bg-primary rounded-md py-2 px-3 text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
             {'>>'}
           </button>
         </div>
-        <span>
+        <div className="text-end">
           Halaman{' '}
           <strong>
             {pageIndex + 1} dari {pageOptions.length}
           </strong>
-        </span>
+        </div>
       </div>
     </div>
   );

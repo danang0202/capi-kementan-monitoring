@@ -47,12 +47,12 @@ const Profile: React.FC = () => {
 
       {/* Tabs */}
       <div className="w-full flex justify-center">
-        <div role="tablist" className="tabs tabs-bordered w-1/2">
-          <button role="tab" aria-selected={activeTab === 'details'} className={`tab ${activeTab === 'details' ? 'tab-active' : ''}`} onClick={() => handleTabChange('details')}>
-            Tab 1
+        <div role="tablist" className="tabs tabs-bordered md:w-1/2 w-full ">
+          <button role="tab" aria-selected={activeTab === 'details'} className={`tab text-xs sm:text-base font-semibold text-slate-700 ${activeTab === 'details' ? 'tab-active' : ''}`} onClick={() => handleTabChange('details')}>
+            Detail Informasi
           </button>
-          <button role="tab" aria-selected={activeTab === 'password'} className={`tab ${activeTab === 'password' ? 'tab-active' : ''}`} onClick={() => handleTabChange('password')}>
-            Tab 2
+          <button role="tab" aria-selected={activeTab === 'password'} className={`tab text-xs sm:text-base font-semibold text-slate-700 ${activeTab === 'password' ? 'tab-active' : ''}`} onClick={() => handleTabChange('password')}>
+            Ganti Password
           </button>
         </div>
       </div>
