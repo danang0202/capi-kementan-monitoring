@@ -25,7 +25,7 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const excludeLayoutRoutes = ['/login']; // Routes where Navbar and Footer should be excluded
+  const excludeLayoutRoutes = ['/login', '/forgot-password']; // Routes where Navbar and Footer should be excluded
 
   // Check if the current route matches the excluded routes or is not found
   const isExcludedRoute = excludeLayoutRoutes.includes(location.pathname);

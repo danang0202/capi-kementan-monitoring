@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
+import { usePassword } from '../hooks/usePassword';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { forgotPassword } = usePassword();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email) {
@@ -17,14 +20,43 @@ const ForgotPassword: React.FC = () => {
       return;
     }
 
-    // Here you can add your logic to handle the forgot password request
-    Swal.fire({
-      title: 'Success!',
-      text: `Password reset link has been sent to ${email}.`,
-      icon: 'success',
-      confirmButtonText: 'OK',
-    });
+    try {
+      // Call the forgot password function
+      setLoading(true);
+      const response = await forgotPassword(email);
+      setLoading(false);
+      if (response.statusCode !== 200) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to send password reset link',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      } else {
+        Swal.fire({
+          title: 'Success!',
+          text: `Password reset link has been sent to ${email}.`,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      }
+    } catch (err: any) {
+      Swal.fire({
+        title: 'Error!',
+        text: err.message || 'Failed to send password reset link.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loading loading-bars loading-lg"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center max-h-screen">

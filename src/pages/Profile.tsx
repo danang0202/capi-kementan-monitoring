@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash, FaUser } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import { usePassword } from '../hooks/usePassword';
+import Swal from 'sweetalert2';
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'details' | 'password'>('details');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    oldPass: '',
+    newPass: '',
+    confirmPass: '',
+  });
   const { user } = useAuth();
+  const { updatePassword } = usePassword();
 
   const handleTabChange = (tab: 'details' | 'password') => {
     setActiveTab(tab);
@@ -24,6 +34,79 @@ const Profile: React.FC = () => {
   const handleShowConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
+
+  // Fungsi untuk menangani perubahan input
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData, // Menyalin state lama
+      [name]: value, // Mengupdate field berdasarkan 'name'
+    });
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const currentPassword = formData.oldPass;
+    const newPassword = formData.newPass;
+    const confirmNewPassword = formData.confirmPass;
+
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Isi semua field!',
+      });
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Password baru dan konfirmasi password tidak sama!',
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await updatePassword(currentPassword, newPassword, confirmNewPassword);
+      setLoading(false);
+      if (response.statusCode !== 200) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: response.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Password berhasil diubah!',
+        });
+        setFormData({
+          oldPass: '',
+          newPass: '',
+          confirmPass: '',
+        });
+      }
+    } catch (err: any) {
+      setLoading(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.message,
+      });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loading loading-bars loading-lg"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="">
@@ -97,7 +180,7 @@ const Profile: React.FC = () => {
                 <span className="label-text">Current Password</span>
               </label>
               <div className="flex items-center gap-2">
-                <input type={showPassword ? 'text' : 'password'} placeholder="Enter current password" className="w-[90%] input input-bordered" required />
+                <input type={showPassword ? 'text' : 'password'} placeholder="Enter current password" className="w-[90%] input input-bordered" required onChange={handleChange} name="oldPass" value={formData.oldPass} />
                 <button className="btn btn-primary" onClick={handleShowPassword}>
                   {showPassword ? <FaEyeSlash className=" text-xl text-white border-spacing-4" /> : <FaEye className=" text-xl text-white border-spacing-4" />}
                 </button>
@@ -108,7 +191,7 @@ const Profile: React.FC = () => {
                 <span className="label-text">New Password</span>
               </label>
               <div className="flex items-center gap-2">
-                <input type={showNewPassword ? 'text' : 'password'} placeholder="Enter new password" className="w-[90%] input input-bordered" required />
+                <input type={showNewPassword ? 'text' : 'password'} placeholder="Enter new password" className="w-[90%] input input-bordered" required onChange={handleChange} name="newPass" value={formData.newPass} />
                 <button className="btn btn-primary" onClick={handleShowNewPassword}>
                   {showNewPassword ? <FaEyeSlash className=" text-xl text-white border-spacing-4" /> : <FaEye className=" text-xl text-white border-spacing-4" />}
                 </button>
@@ -119,13 +202,15 @@ const Profile: React.FC = () => {
                 <span className="label-text">Confirm New Password</span>
               </label>
               <div className="flex items-center gap-2">
-                <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Confirm new password" className="w-[90%] input input-bordered" required />
+                <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Confirm new password" className="w-[90%] input input-bordered" required onChange={handleChange} name="confirmPass" value={formData.confirmPass} />
                 <button className="btn btn-primary" onClick={handleShowConfirmPassword}>
                   {showConfirmPassword ? <FaEyeSlash className=" text-xl text-white border-spacing-4" /> : <FaEye className=" text-xl text-white border-spacing-4" />}
                 </button>
               </div>
             </div>
-            <button className="btn btn-primary w-full">Update Password</button>
+            <button className="btn btn-primary w-full" onClick={handleUpdatePassword}>
+              Update Password
+            </button>
           </div>
         )}
       </div>
