@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { useAuth } from '../context/AuthContext';
@@ -12,20 +12,21 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Login Berhasil',
+        text: 'Login sukses, Anda akan diarahkan ke halaman Dashboard',
+      }).then(() => navigate('/'));
+    }
+  });
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       // Panggil fungsi login
       await login(username, password);
-      if (isAuthenticated) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Login Sukses',
-        }).then(() => {
-          navigate('/'); // Redirect setelah login
-        });
-      }
     } catch (err: any) {
       // Jika gagal, tampilkan pesan error yang relevan
       Swal.fire({
