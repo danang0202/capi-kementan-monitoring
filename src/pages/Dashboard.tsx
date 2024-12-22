@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="">
       {/* Selamat Datang */}
-      <div className="card py-4" data-aos="fade-left">
+      <div className="card pb-4" data-aos="fade-left">
         <h1 className="font-semibold text-2xl">Selamat Datang {user?.name}</h1>
         <p>Halaman Dashboard Web Monitoring Patanas Awwwwyeahhh</p>
       </div>
