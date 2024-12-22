@@ -103,6 +103,9 @@ const ResetPassword: React.FC = () => {
           text: `Password has been reset for ${formData.email}.`,
           icon: 'success',
           confirmButtonText: 'OK',
+        }).then(() => {
+          // Redirect ke halaman login jika berhasil mereset password
+          window.location.href = '/login';
         });
       }
     } catch (err: any) {
