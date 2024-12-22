@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Hasil from './pages/Hasil';
 import MainLayout from './layouts/MainLayout';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Komponen untuk proteksi rute
@@ -25,7 +26,7 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const excludeLayoutRoutes = ['/login', '/forgot-password']; // Routes where Navbar and Footer should be excluded
+  const excludeLayoutRoutes = ['/login', '/forgot-password', '/reset-password']; // Routes where Navbar and Footer should be excluded
 
   // Check if the current route matches the excluded routes or is not found
   const isExcludedRoute = excludeLayoutRoutes.includes(location.pathname);
@@ -75,6 +76,7 @@ const AppContent: React.FC = () => {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </MainLayout>
