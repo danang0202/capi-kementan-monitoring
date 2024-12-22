@@ -17,7 +17,7 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="">
       <h1 className="text-2xl font-bold mb-2">Frequently Asked Questions</h1>
       <div className="breadcrumbs text-sm mb-4">
         <ul>

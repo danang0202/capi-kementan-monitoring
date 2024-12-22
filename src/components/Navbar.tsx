@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className="hidden md:flex flex-none">
-          <ul className="menu menu-horizontal px-1 font-semibold">
+          <ul className="menu menu-horizontal px-1 ">
             <li>
               <a href="/" className={isActive('/') ? 'bg-primary text-white' : ''}>
                 Dashboard
@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
             </li>
           </ul>
         </div>
-        <div className="navbar-end pr-2 relative font-semibold" ref={dropdownRef}>
+        <div className="navbar-end pr-2 relative " ref={dropdownRef}>
           <div className="hidden md:block">
             <FaUser size={24} className="text-primary hover:text-green-900 cursor-pointer" onClick={toggleDropdown} />
             {isDropdownOpen && (
@@ -106,7 +106,7 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="bg-base-100 shadow-md fixed top-16 left-0 w-full z-20 md:hidden">
-          <ul className="menu p-4 font-semibold">
+          <ul className="menu p-4 ">
             <li>
               <a href="/" className={isActive('/') ? 'bg-primary text-white' : ''} onClick={toggleMobileMenu}>
                 Dashboard

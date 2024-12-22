@@ -42,7 +42,7 @@ const Progress: React.FC = () => {
   }));
 
   return (
-    <div className="p-8">
+    <div className="">
       <h1 className="text-2xl font-bold mb-2">Progress Pencacahan</h1>
       <div className="breadcrumbs text-sm mb-2">
         <ul>

@@ -2,6 +2,10 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      sans: ['Roboto', 'sans-serif'],
+      // sans: ['"Comic Sans MS"', 'cursive', 'sans-serif'],
+    },
     extend: {
       screens: {
         xs: '375px',

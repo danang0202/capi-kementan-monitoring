@@ -19,7 +19,7 @@ const ProgressBar: React.FC<ProgressProps> = ({ max, value, label = true, percen
 
   return (
     <div className="w-full ">
-      <div className="flex w-full justify-between font-semibold">
+      <div className="flex w-full justify-between ">
         <p>Kuesioner terisi</p>
         {percentage && <p>{Math.round((value / max) * 100)}%</p>}
       </div>

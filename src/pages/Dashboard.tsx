@@ -23,12 +23,64 @@ const Dashboard: React.FC = () => {
     AOS.init({ duration: 1000, once: true }); // Durasi animasi dalam milidetik
   }, []);
   return (
-    <div className="p-4">
+    <div className="">
+      {/* Selamat Datang */}
       <div className="card py-4" data-aos="fade-left">
         <h1 className="font-semibold text-2xl">Selamat Datang {user?.name}</h1>
         <p>Halaman Dashboard Web Monitoring Patanas Awwwwyeahhh</p>
       </div>
-      <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-4 " data-aos="fade-left">
+
+      {/* Waktu */}
+      <div className="shadow-md p-4  bg-white rounded-md" data-aos="fade-left">
+        <div className="box-content py-2 md:flex block max-md:space-y-2 justify-between text-sm">
+          <div className="card-compact flex gap-2 items-center">
+            <div className="flex gap-2 items-center">
+              <IoIosTimer className="text-primary text-2xl md:text-4xl" />
+              <h2 className="font-semibold">Waktu Mulai : </h2>
+            </div>
+            <p>{convertToIndonesianDate(Period.start)}</p>
+          </div>
+          <div className=" card-compact flex gap-2 items-center">
+            <div className="flex gap-2 items-center">
+              <IoTimeOutline className="text-primary text-2xl md:text-4xl" />
+              <h2 className="font-semibold">Waktu Selesai : </h2>
+            </div>
+            <p>{convertToIndonesianDate(Period.end)}</p>
+          </div>
+        </div>
+
+        <hr className="w-full border-t-[1.7px] border-slate-300" />
+
+        <div className="card py-4 md:flex md:flex-row justify-between items-center max-md:space-y-2">
+          <h1 className="">{GetTanggalIndonesia()}</h1>
+          {new Date() < Period.start && <Button variant="primary" label="Periode Survei Belum Dimulai" />}
+          {new Date() >= Period.start && new Date() <= Period.end && (
+            <p className="text-primary font-semibold">Tersisa {`${calculateRemainingTime(Period.end).days.toString()} hari ${calculateRemainingTime(Period.end).hours.toString()} jam`} </p>
+          )}
+          {new Date() > Period.end && <Button label="Periode Survei Telah Selesai" variant="primary" />}
+        </div>
+      </div>
+
+      {/* Jumlah petugas sampel */}
+      <div className="box-content py-2 md:grid md:grid-cols-2 gap-4 max-md:space-y-2 " data-aos="fade-right">
+        <div className=" shadow-md p-4 card-compact flex gap-2  items-center bg-white rounded-md ">
+          <FaClipboardList className="text-primary text-2xl md:text-4xl" />
+          <div className="">
+            <h2 className="font-semibold">Jumlah Sampel</h2>
+            <p>45 Orang</p>
+          </div>
+        </div>
+        <div className=" shadow-md p-4 card-compact flex gap-2 items-center bg-white rounded-md ">
+          <FaPeopleGroup className="text-primary text-2xl md:text-4xl" />
+          <div className="">
+            <h2 className="font-semibold">Jumlah Petugas</h2>
+            <p>20 Orang</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Ringkasan Hasil Cacah */}
+      <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-2 md:gap-4 " data-aos="fade-left">
         <div className=" shadow-md p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
           <FaArchive className="text-info text-6xl mx-auto" />
           <div className="md:w-3/5 flex justify-center">
@@ -63,9 +115,9 @@ const Dashboard: React.FC = () => {
             <p className=" text-error font-semibold badge badge-ghost">0</p>
           </div>
         </div>
-        <div className=" shadow-md p-4 py-8 card-compact flex gap-2 items-center bg-white rounded-md ">
-          <FaCheckCircle className="text-success text-6xl" />
-          <div className="w-3/5 flex justify-center">
+        <div className="shadow-md p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
+          <FaCheckCircle className="text-success text-6xl mx-auto" />
+          <div className="md:w-3/5 flex justify-center">
             <div className="text-center">
               <h2 className="font-semibold">Total Approved</h2>
               <p className="text-3xl text-success font-semibold">14</p>
@@ -74,54 +126,16 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="shadow-md p-4  bg-white rounded-md" data-aos="fade-left">
-        <div className="box-content py-2 md:flex block max-md:space-y-2 justify-between">
-          <div className="card-compact flex gap-2 items-center">
-            <IoIosTimer className="text-primary text-4xl" />
-            <h2 className="font-semibold">Waktu Mulai</h2>
-            <p>{convertToIndonesianDate(Period.start)}</p>
-          </div>
-          <div className=" card-compact flex gap-2 items-center">
-            <IoTimeOutline className="text-primary text-4xl" />
-            <h2 className="font-semibold">Waktu Selesai</h2>
-            <p>{convertToIndonesianDate(Period.end)}</p>
-          </div>
-        </div>
 
-        <hr className="w-full border-t-[1.7px] border-slate-300" />
-
-        <div className="card py-4 flex flex-row justify-between items-center ">
-          <h1 className="font-semibold text-">{GetTanggalIndonesia()}</h1>
-          {new Date() < Period.start && <Button variant="primary" label="Periode Survei Belum Dimulai" />}
-          {new Date() >= Period.start && new Date() <= Period.end && (
-            <p className="text-primary font-semibold">Tersisa {`${calculateRemainingTime(Period.end).days.toString()} hari ${calculateRemainingTime(Period.end).hours.toString()} jam`} </p>
-          )}
-          {new Date() > Period.end && <Button label="Periode Survei Telah Selesai" variant="primary" />}
-        </div>
-      </div>
-
-      <div className="box-content py-2 grid grid-cols-2 gap-4 " data-aos="fade-right">
-        <div className=" shadow-md p-4 card-compact flex gap-2  items-center bg-white rounded-md ">
-          <FaClipboardList className="text-primary text-4xl" />
-          <div className="">
-            <h2 className="font-semibold">Jumlah Sampel</h2>
-            <p>45 Orang</p>
-          </div>
-        </div>
-        <div className=" shadow-md p-4 card-compact flex gap-2 items-center bg-white rounded-md ">
-          <FaPeopleGroup className="text-primary text-4xl" />
-          <div className="">
-            <h2 className="font-semibold">Jumlah Petugas</h2>
-            <p>20 Orang</p>
-          </div>
-        </div>
-      </div>
+      {/* Progress Pencacahan */}
       <div className="p-4 space-y-2 rounded-md bg-white shadow-md" data-aos="fade-right">
         <h1 className="font-semibold text-xl ">Progress Pencacahan </h1>
         <hr className="w-full border-t-[1.7px] border-slate-300" />
         <ProgressBar max={100} value={35} label={true} percentage={true} />
         {/* <Button label="Lihat Detail" variant="primary" /> */}
       </div>
+
+      {/* Progress Pencacahan Per Petugas */}
 
       <div className="p-4 space-y-2 rounded-md bg-white my-4 shadow-md" data-aos="fade-up">
         <h1 className="font-semibold text-xl ">Progress Pencacahan Per Petugas</h1>

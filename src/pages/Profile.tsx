@@ -50,10 +50,10 @@ const Profile: React.FC = () => {
       {/* Tabs */}
       <div className="w-full flex justify-center">
         <div role="tablist" className="tabs tabs-bordered md:w-1/2 w-full ">
-          <button role="tab" aria-selected={activeTab === 'details'} className={`tab text-xs sm:text-base font-semibold text-slate-700 ${activeTab === 'details' ? 'tab-active' : ''}`} onClick={() => handleTabChange('details')}>
+          <button role="tab" aria-selected={activeTab === 'details'} className={`tab text-xs sm:text-base  text-slate-700 ${activeTab === 'details' ? 'tab-active' : ''}`} onClick={() => handleTabChange('details')}>
             Detail Informasi
           </button>
-          <button role="tab" aria-selected={activeTab === 'password'} className={`tab text-xs sm:text-base font-semibold text-slate-700 ${activeTab === 'password' ? 'tab-active' : ''}`} onClick={() => handleTabChange('password')}>
+          <button role="tab" aria-selected={activeTab === 'password'} className={`tab text-xs sm:text-base  text-slate-700 ${activeTab === 'password' ? 'tab-active' : ''}`} onClick={() => handleTabChange('password')}>
             Ganti Password
           </button>
         </div>
@@ -62,7 +62,7 @@ const Profile: React.FC = () => {
       {/* Tab Content */}
       <div className="mt-4">
         {activeTab === 'details' && (
-          <div className="flex flex-col max-w-md mx-auto">
+          <div className="flex flex-col max-w-md mx-auto ">
             <div className="form-control mb-4">
               <label className="label">
                 <span className="label-text">Full Name</span>
