@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
 import { convertToIndonesianDate } from '../utils/convertDate';
@@ -9,20 +10,22 @@ import { IoIosTimer } from 'react-icons/io';
 import { IoTimeOutline } from 'react-icons/io5';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { MdReportProblem, MdSend, MdEditDocument } from 'react-icons/md';
-import { User } from '../data/user';
+import { useAuth } from '../context/AuthContext';
 import { Progress } from '../data/Progress';
 import ProgressBar from '../components/ProgressBar';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
 
 const Dashboard: React.FC = () => {
+  const { user } = useAuth();
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: true }); // Durasi animasi dalam milidetik
   }, []);
   return (
     <div className="p-4">
       <div className="card py-4" data-aos="fade-left">
-        <h1 className="font-semibold text-2xl">Selamat Datang {User.name}</h1>
+        <h1 className="font-semibold text-2xl">Selamat Datang {user?.name}</h1>
         <p>Halaman Dashboard Web Monitoring Patanas Awwwwyeahhh</p>
       </div>
       <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-4 " data-aos="fade-left">
@@ -132,7 +135,9 @@ const Dashboard: React.FC = () => {
             </div>
           ))}
         </div>
-        <Button label="Lihat Progress Petugas Lainnya" variant="primary" />
+        <Link to={'/progress'} className="btn px-4 py-2 font-bold btn-primary">
+          Lihat Progress Petugas Lainnya
+        </Link>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick = () => {}, variant = 'p
   };
 
   return (
-    <button className={`${baseStyles} ${variants[variant]}`} onClick={onClick}>
+    <button className={`${baseStyles} ${variants[variant]}`} onClick={() => onClick()}>
       {label}
     </button>
   );

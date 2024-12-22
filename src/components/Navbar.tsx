@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import { RiProfileLine } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
@@ -9,6 +10,11 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -82,10 +88,10 @@ const Navbar: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/login" className="flex items-center gap-2 text-error" onClick={() => setIsDropdownOpen(false)}>
+                  <button className="flex items-center gap-2 text-error" onClick={handleLogout}>
                     <CiLogout className="text-error" />
                     Keluar
-                  </Link>
+                  </button>
                 </li>
               </ul>
             )}
@@ -128,10 +134,10 @@ const Navbar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/login" className="flex items-center gap-2 text-error" onClick={toggleMobileMenu}>
+              <button className="flex items-center gap-2 text-error" onClick={handleLogout}>
                 <CiLogout className="text-error" />
                 Keluar
-              </Link>
+              </button>
             </li>
           </ul>
         </div>

@@ -1,44 +1,62 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Tambahkan logika login di sini
-    Swal.fire({
-      title: 'Succes',
-      text: 'Login Succes',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    }).then(() => {
-      window.location.href = '/';
-    });
-  };
-
+  const { login, isAuthenticated } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Panggil fungsi login
+      await login(username, password);
+      if (isAuthenticated) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Login Sukses',
+        }).then(() => {
+          navigate('/'); // Redirect setelah login
+        });
+      }
+    } catch (err: any) {
+      // Jika gagal, tampilkan pesan error yang relevan
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Gagal',
+        text: err.message || 'Username atau Password salah',
+      });
+    }
+  };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center max-h-screen ">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">Username</span>
             </label>
-            <input type="email" placeholder="Enter your email" className="input input-bordered w-full" required />
+            <input type="text" placeholder="Enter your username" className="input input-bordered w-full" required onChange={(e) => setUsername(e.target.value)} />
           </div>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Password</span>
             </label>
             <div className="flex items-center gap-2">
-              <input type={showPassword ? 'text' : 'password'} placeholder="Enter current password" className="w-[90%] input input-bordered" required />
+              <input type={showPassword ? 'text' : 'password'} placeholder="Enter current password" className="w-[90%] input input-bordered" required onChange={(e) => setPassword(e.target.value)} />
               <button className="btn btn-primary" type="button" onClick={handleShowPassword}>
                 {showPassword ? <FaEyeSlash className=" text-xl text-white border-spacing-4" /> : <FaEye className=" text-xl text-white border-spacing-4" />}
               </button>

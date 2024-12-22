@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash, FaUser } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'details' | 'password'>('details');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const { user } = useAuth();
 
   const handleTabChange = (tab: 'details' | 'password') => {
     setActiveTab(tab);
@@ -65,19 +67,25 @@ const Profile: React.FC = () => {
               <label className="label">
                 <span className="label-text">Full Name</span>
               </label>
-              <input type="text" placeholder="Enter full name" className="input input-bordered" value={'John Doe'} readOnly={true} />
+              <input type="text" placeholder="Enter full name" className="input input-bordered" value={user?.name} readOnly={true} />
             </div>
             <div className="form-control mb-4">
               <label className="label">
                 <span className="label-text">Email</span>
               </label>
-              <input type="email" placeholder="Enter email" className="input input-bordered" value={'JohnDoe@stis.ac.id'} readOnly={true} />
+              <input type="email" placeholder="Enter email" className="input input-bordered" value={user?.email} readOnly={true} />
             </div>
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Phone Number</span>
+                <span className="label-text">Username</span>
               </label>
-              <input type="tel" placeholder="Enter phone number" className="input input-bordered" value={'081020130392'} readOnly={true} />
+              <input type="text" placeholder="Enter Username" className="input input-bordered" value={user?.username} readOnly={true} />
+            </div>
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">Role</span>
+              </label>
+              <input type="text" placeholder="Enter Role" className="input input-bordered" value={user?.role} readOnly={true} />
             </div>
           </div>
         )}
