@@ -23,12 +23,12 @@ const Progress: React.FC = () => {
       },
       {
         Header: 'Nama',
-        accessor: 'data.name', // Nama dari data
+        accessor: 'name', // Nama dari data
       },
       {
         Header: 'Progress',
         Cell: ({ row }: { row: { original: ProgressItem } }) => {
-          const { value, max } = row.original.data;
+          const { value, max } = row.original;
           return <ProgressBar value={value} max={max} label={true} percentage={true} />;
         },
       },
@@ -38,7 +38,7 @@ const Progress: React.FC = () => {
 
   const data: ProgressItem[] = ProgressDataSource.map((item, index) => ({
     nomer: index + 1, // Nomor otomatis
-    data: item.data,
+    ...item,
   }));
 
   return (

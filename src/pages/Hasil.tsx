@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import TableComponent from '../components/Table';
 import { FaArrowRight, FaEye } from 'react-icons/fa';
 import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
-import { LuRefreshCcw } from 'react-icons/lu';
 
 interface SubmissionData {
   id: number;
@@ -53,8 +52,9 @@ const Hasil: React.FC = () => {
   const getStatusClass = (status: string) => {
     switch (status) {
       case 'Diterima':
-        return 'btn-info';
+        return 'text-gray-800 bg-gray-200';
       case 'Bermasalah':
+        return 'text-orange-600 hover:bg-orange-500';
       case 'Diubah':
         return 'btn-warning';
       case 'Ditolak':
@@ -94,13 +94,13 @@ const Hasil: React.FC = () => {
         const { id, status } = row.original;
         return (
           <div className={`dropdown dropdown-hover ${id === 1 ? 'dropdown-end' : 'dropdown-top'}`}>
-            <label tabIndex={0} className={`btn ${getStatusClass(status)} btn-sm`}>
+            <label tabIndex={0} className={`btn ${getStatusClass(status)} btn-sm btn-outline bg-white`}>
               {status}
             </label>
             <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52  overflow-y-auto">
               {['Diterima', 'Bermasalah', 'Diubah', 'Ditolak', 'Diapprove'].map((newStatus) => (
                 <li key={newStatus}>
-                  <button className="btn btn-ghost btn-sm" onClick={() => handleStatusChange(id, newStatus)}>
+                  <button className="btn btn-ghost btn-sm " onClick={() => handleStatusChange(id, newStatus)}>
                     {newStatus}
                   </button>
                 </li>
@@ -115,7 +115,7 @@ const Hasil: React.FC = () => {
       accessor: 'id',
       Cell: ({ row }: any) => {
         return (
-          <button className="btn lg:btn-sm btn-md font-semibold btn-info ">
+          <button className="btn lg:btn-sm btn-md font-semibold btn-primary ">
             Lihat
             <FaEye className="text-lg" />
           </button>
@@ -136,23 +136,6 @@ const Hasil: React.FC = () => {
             <a href="/hasil">Hasil Pencacahan</a>
           </li>
         </ul>
-      </div>
-
-      <div className="block max-md:space-y-2 md:flex justify-between items-center my-2 ">
-        <h1 className="text-info font-semibold text-2xl">Submission Terbaru</h1>
-        <p>
-          <span className="text-primary font-semibold">Last Update</span>
-          &nbsp; &nbsp;
-          {`${GetTanggalIndonesia()}  pukul ${new Date().toLocaleTimeString()}`}
-        </p>
-        <div className="space-x-4">
-          <button className="btn btn-accent md:text-base text-xs">
-            Refresh <LuRefreshCcw className="md:text-xl text-base" />
-          </button>
-          <button className="btn btn-info md:text-base text-xs">
-            Selengkapnya <FaArrowRight className="md:text-xl text-base" />
-          </button>
-        </div>
       </div>
 
       <hr className="w-full border-t-[1.7px] border-slate-300 mb-4" />

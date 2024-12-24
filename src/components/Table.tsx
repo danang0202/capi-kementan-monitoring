@@ -1,10 +1,44 @@
 import React, { useMemo, useState } from 'react';
-import { useTable, usePagination, useGlobalFilter, useFilters, Column } from 'react-table';
+import { useTable, usePagination, useGlobalFilter, useFilters, useSortBy, Column } from 'react-table';
+import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
 
-// Komponen untuk input pencarian
-const GlobalFilter = ({ globalFilter, setGlobalFilter }: { globalFilter: string; setGlobalFilter: (filter: string) => void }) => (
-  <input value={globalFilter || ''} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Cari data..." className="input input-bordered mb-4 w-10/12 " />
-);
+// Komponen untuk input pencarian dengan rekomendasi
+const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestions, setInputValue }: { globalFilter: string; setGlobalFilter: (filter: string) => void; suggestions: string[]; setInputValue: (value: string) => void }) => {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  return (
+    <div className="relative w-10/12">
+      <input
+        value={globalFilter || ''}
+        onChange={(e) => {
+          setGlobalFilter(e.target.value);
+          setInputValue(e.target.value);
+          setShowSuggestions(true);
+        }}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+        placeholder="Cari data..."
+        className="input input-bordered w-full mb-4"
+      />
+      {showSuggestions && suggestions.length > 0 && (
+        <ul className="absolute bg-white border rounded-md shadow-md w-full z-10">
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              onClick={() => {
+                setGlobalFilter(suggestion);
+                setInputValue(suggestion);
+                setShowSuggestions(false);
+              }}
+              className="p-2 hover:bg-gray-200 cursor-pointer"
+            >
+              {suggestion}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 
 interface TableProps<T extends object> {
   columns: Column<T>[];
@@ -13,6 +47,8 @@ interface TableProps<T extends object> {
 
 const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [inputValue, setInputValue] = useState('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setGlobalFilter, state, setPageSize } = useTable(
     {
@@ -22,16 +58,36 @@ const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
     },
     useFilters,
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 
   const { globalFilter, pageIndex } = state;
 
+  // Membuat rekomendasi berdasarkan input
+  const updateSuggestions = (value: string) => {
+    if (!value) {
+      setSuggestions([]);
+      return;
+    }
+    const allValues = data.flatMap((row: any) => Object.values(row));
+    const filteredSuggestions = Array.from(new Set(allValues.filter((item) => item.toString().toLowerCase().includes(value.toLowerCase()))));
+    setSuggestions(filteredSuggestions);
+  };
+
   return (
     <div className="overflow-x-auto overflow-y-auto">
       {/* Input Pencarian */}
       <div className="flex justify-between">
-        <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+        <GlobalFilterWithSuggestions
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+          suggestions={suggestions}
+          setInputValue={(value) => {
+            setInputValue(value);
+            updateSuggestions(value);
+          }}
+        />
         <select
           className="select select-bordered"
           value={rowsPerPage}
@@ -54,7 +110,10 @@ const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  <span className="">{column.isSorted ? column.isSortedDesc ? <FaSortDown className="inline-block" /> : <FaSortUp className="inline-block" /> : <FaSort className="inline-block" />}</span>
+                </th>
               ))}
             </tr>
           ))}
