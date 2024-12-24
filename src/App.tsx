@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/Not_Found';
 import Progress from './pages/Progress';
-import FAQ from './pages/FAQ';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Hasil from './pages/Hasil';
@@ -55,14 +54,6 @@ const AppContent: React.FC = () => {
           element={
             <PrivateRoute>
               <Hasil />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/faq"
-          element={
-            <PrivateRoute>
-              <FAQ />
             </PrivateRoute>
           }
         />

@@ -10,28 +10,18 @@ import { IoIosTimer } from 'react-icons/io';
 import { IoTimeOutline } from 'react-icons/io5';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { MdReportProblem, MdSend, MdEditDocument } from 'react-icons/md';
-import { useAuth } from '../context/AuthContext';
 import { Progress } from '../data/Progress';
 import ProgressBar from '../components/ProgressBar';
 import 'aos/dist/aos.css';
-import AOS from 'aos';
 
 const Dashboard: React.FC = () => {
-  const { user } = useAuth();
-
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true }); // Durasi animasi dalam milidetik
-  }, []);
   return (
-    <div className="">
-      {/* Selamat Datang */}
-      <div className="card pb-4" data-aos="fade-left">
-        <h1 className="font-semibold text-2xl">Selamat Datang {user?.name}</h1>
-        <p>Halaman Dashboard Web Monitoring Patanas Awwwwyeahhh</p>
-      </div>
-
+    <div className="flex flex-col gap-4">   
+      <p className='text-gray-500 text-sm'>Dashboard</p>
+      {/* Greetings */}
+      <p className='font-extrabold text-2xl'>Selamat datang !</p>
       {/* Waktu */}
-      <div className="shadow-md p-4  bg-white rounded-md" data-aos="fade-left">
+      <div className="shadow p-4 bg-white rounded-md">
         <div className="box-content py-2 md:flex block max-md:space-y-2 justify-between text-sm">
           <div className="card-compact flex gap-2 items-center">
             <div className="flex gap-2 items-center">
@@ -62,15 +52,15 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Jumlah petugas sampel */}
-      <div className="box-content py-2 md:grid md:grid-cols-2 gap-4 max-md:space-y-2 " data-aos="fade-right">
-        <div className=" shadow-md p-4 card-compact flex gap-2  items-center bg-white rounded-md ">
+      <div className="box-content py-2 md:grid md:grid-cols-2 gap-4 max-md:space-y-2 ">
+        <div className=" shadow p-4 card-compact flex gap-2  items-center bg-white rounded-md ">
           <FaClipboardList className="text-primary text-2xl md:text-4xl" />
           <div className="">
             <h2 className="font-semibold">Jumlah Sampel</h2>
             <p>45 Orang</p>
           </div>
         </div>
-        <div className=" shadow-md p-4 card-compact flex gap-2 items-center bg-white rounded-md ">
+        <div className=" shadow p-4 card-compact flex gap-2 items-center bg-white rounded-md ">
           <FaPeopleGroup className="text-primary text-2xl md:text-4xl" />
           <div className="">
             <h2 className="font-semibold">Jumlah Petugas</h2>
@@ -80,8 +70,8 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Ringkasan Hasil Cacah */}
-      <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-2 md:gap-4 " data-aos="fade-left">
-        <div className=" shadow-md p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
+      <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-2 md:gap-4 ">
+        <div className=" shadow p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
           <FaArchive className="text-info text-6xl mx-auto" />
           <div className="md:w-3/5 flex justify-center">
             <div className="text-center">
@@ -92,30 +82,30 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
         <div className="grid grid-flow-row gap-2">
-          <div className=" shadow-md p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
+          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
             <MdSend className="text-info text-3xl" />
             <h2 className="">Diterima</h2>
             <p className=" text-info font-semibold badge badge-ghost">14</p>
           </div>
-          <div className=" shadow-md p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
+          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
             <MdEditDocument className="text-warning text-3xl" />
             <h2 className="">Diubah</h2>
             <p className=" text-warning font-semibold badge badge-ghost">1</p>
           </div>
         </div>
         <div className="grid grid-flow-row gap-2">
-          <div className=" shadow-md p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
+          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
             <MdReportProblem className="text-warning text-3xl" />
             <h2 className="">Bermasalah</h2>
             <p className=" text-warning font-semibold badge badge-ghost">0</p>
           </div>
-          <div className=" shadow-md p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
+          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
             <FaWindowClose className="text-error text-3xl" />
             <h2 className="">Ditolak</h2>
             <p className=" text-error font-semibold badge badge-ghost">0</p>
           </div>
         </div>
-        <div className="shadow-md p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
+        <div className="shadow p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
           <FaCheckCircle className="text-success text-6xl mx-auto" />
           <div className="md:w-3/5 flex justify-center">
             <div className="text-center">
@@ -128,7 +118,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Progress Pencacahan */}
-      <div className="p-4 space-y-2 rounded-md bg-white shadow-md" data-aos="fade-right">
+      <div className="p-4 space-y-2 rounded-md bg-white shadow">
         <h1 className="font-semibold text-xl ">Progress Pencacahan </h1>
         <hr className="w-full border-t-[1.7px] border-slate-300" />
         <ProgressBar max={100} value={35} label={true} percentage={true} />
@@ -137,13 +127,13 @@ const Dashboard: React.FC = () => {
 
       {/* Progress Pencacahan Per Petugas */}
 
-      <div className="p-4 space-y-2 rounded-md bg-white my-4 shadow-md" data-aos="fade-up">
+      <div className="p-4 space-y-2 rounded-md bg-white my-4 shadow">
         <h1 className="font-semibold text-xl ">Progress Pencacahan Per Petugas</h1>
         <hr className="w-full border-t-[1.7px] border-slate-300" />
 
         <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
           {Progress.slice(0, 3).map((item) => (
-            <div className="block shadow-md p-4">
+            <div className="block shadow p-4">
               <h2 className="font-semibold text-lg">{item.data.name}</h2>
               <ProgressBar key={item.id} max={item.data.max} value={item.data.value} label={true} percentage={true} />
             </div>

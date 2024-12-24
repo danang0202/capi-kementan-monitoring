@@ -4,8 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import { RiProfileLine } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
+import { MenuItem, menuItemsData } from '../data/navbar';
 
 const Navbar: React.FC = () => {
+  const menuItems: MenuItem[] = menuItemsData;
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -38,45 +41,34 @@ const Navbar: React.FC = () => {
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
-
   return (
     <>
       {/* Desktop */}
-      <nav className="navbar bg-base-100/90 z-10 shadow-md flex items-center justify-between px-4 fixed top-0 w-full">
+      <nav className="navbar bg-base-100/90 z-10 shadow-md flex items-center justify-between px-4 lg:px-36 fixed top-0 w-full">
         <div className="navbar-start">
           <Link to="/" className="text-xl font-bold flex items-center gap-2">
             <img src="/public/logo kementan.png" alt="logo kementan" height={50} width={50} />
             <div className="md:block text-sm font-normal hidden">
-              <p className="text-lg font-bold">Web Monitoring</p>
-              PATANAS Awyeah
+              <p className="text-lg font-bold">Monitoring Survei</p>
+              Kementrian Pertanian RI
             </div>
           </Link>
         </div>
         <div className="hidden md:flex flex-none">
-          <ul className="menu menu-horizontal px-1 ">
-            <li>
-              <a href="/" className={isActive('/') ? 'bg-primary text-white' : ''}>
-                Dashboard
-              </a>
-            </li>
-            <li>
-              <a href="/progress" className={isActive('/progress') ? 'bg-primary text-white' : ''}>
-                Progress Cacah
-              </a>
-            </li>
-            <li>
-              <a href="/hasil" className={isActive('/hasil') ? 'bg-primary text-white' : ''}>
-                Hasil Cacah
-              </a>
-            </li>
-            <li>
-              <a href="/faq" className={isActive('/faq') ? 'bg-primary text-white' : ''}>
-                FAQ
-              </a>
-            </li>
+          <ul className="menu menu-horizontal px-1">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  to={item.path}
+                  className={isActive(item.path) ? 'text-primary font-semibold' : ''}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <div className="navbar-end pr-2 relative " ref={dropdownRef}>
+        <div className="navbar-end pr-2 relative" ref={dropdownRef}>
           <div className="hidden md:block">
             <FaUser size={24} className="text-primary hover:text-green-900 cursor-pointer" onClick={toggleDropdown} />
             {isDropdownOpen && (
@@ -106,27 +98,18 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="bg-base-100 shadow-md fixed top-16 left-0 w-full z-20 md:hidden">
-          <ul className="menu p-4 ">
-            <li>
-              <a href="/" className={isActive('/') ? 'bg-primary text-white' : ''} onClick={toggleMobileMenu}>
-                Dashboard
-              </a>
-            </li>
-            <li>
-              <a href="/progress" className={isActive('/progress') ? 'bg-primary text-white' : ''} onClick={toggleMobileMenu}>
-                Progress Cacah
-              </a>
-            </li>
-            <li>
-              <a href="/hasil" className={isActive('/hasil') ? 'bg-primary text-white' : ''} onClick={toggleMobileMenu}>
-                Hasil Cacah
-              </a>
-            </li>
-            <li>
-              <a href="/faq" className={isActive('/faq') ? 'bg-primary text-white' : ''} onClick={toggleMobileMenu}>
-                FAQ
-              </a>
-            </li>
+          <ul className="menu p-4">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  to={item.path}
+                  className={isActive(item.path) ? 'text-primary font-semibold' : ''}
+                  onClick={toggleMobileMenu}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
             <li>
               <Link to="/profile" className="flex items-center gap-2" onClick={toggleMobileMenu}>
                 <RiProfileLine className="text-primary" />
