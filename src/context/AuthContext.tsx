@@ -20,12 +20,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true); // State untuk loading
   const API_URL = import.meta.env.VITE_API_URL;
-  const CENTRAL_API = import.meta.env.CENTRAL_API_URL;
-  const CENTRAL_EMAIL =  import.meta.env.CENTRAL_EMAIL;
-  const CENTRAL_PASS = import.meta.env.CENTRAL_PASSWORD;
-
-  console.log(API_URL);
-  
+  const CENTRAL_API = import.meta.env.VITE_CENTRAL_API_URL;
+  const CENTRAL_EMAIL =  import.meta.env.VITE_CENTRAL_EMAIL;
+  const CENTRAL_PASS = import.meta.env.VITE_CENTRAL_PASSWORD;  
 
   useEffect(() => {
     const checkAuth = async () => {
