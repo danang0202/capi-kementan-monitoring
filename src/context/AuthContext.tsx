@@ -20,6 +20,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true); // State untuk loading
   const API_URL = import.meta.env.VITE_API_URL;
+  const CENTRAL_API = import.meta.env.CENTRAL_API_URL;
+  const CENTRAL_EMAIL =  import.meta.env.CENTRAL_EMAIL;
+  const CENTRAL_PASS = import.meta.env.CENTRAL_PASSWORD;
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -58,6 +61,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (!data.data || data.data.role !== 'Petinggi') {
         throw new Error('Anda tidak memiliki akses');
       }
+
+      await fetch(`${CENTRAL_API}v1/sessions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: CENTRAL_EMAIL, password: CENTRAL_PASS }),
+      })
 
       window.localStorage.setItem('token', data.data.access_token);
       window.localStorage.setItem('user', JSON.stringify(data.data));
