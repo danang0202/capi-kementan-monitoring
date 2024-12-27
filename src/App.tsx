@@ -76,7 +76,7 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename='/webmon/'>
       <AuthProvider>
         <AppContent />
       </AuthProvider>

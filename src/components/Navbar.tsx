@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
       <nav className="navbar bg-base-100/90 z-10 shadow-md flex items-center justify-between px-4 lg:px-36 fixed top-0 w-full">
         <div className="navbar-start">
           <Link to="/" className="text-xl font-bold flex items-center gap-2">
-            <img src="/public/logo kementan.png" alt="logo kementan" height={50} width={50} />
+            <img src="/webmon/public/logo kementan.png" alt="logo kementan" height={50} width={50} />
             <div className="md:block text-sm font-normal hidden">
               <p className="text-lg font-bold">Monitoring Survei</p>
               Kementrian Pertanian RI
