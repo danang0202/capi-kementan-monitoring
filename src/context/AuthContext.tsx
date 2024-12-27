@@ -24,6 +24,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const CENTRAL_EMAIL =  import.meta.env.CENTRAL_EMAIL;
   const CENTRAL_PASS = import.meta.env.CENTRAL_PASSWORD;
 
+  console.log(API_URL);
+  
+
   useEffect(() => {
     const checkAuth = async () => {
       const token = window.localStorage.getItem('token');
