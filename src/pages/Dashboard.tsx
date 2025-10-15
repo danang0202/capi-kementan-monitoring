@@ -10,7 +10,7 @@ import { IoIosTimer } from 'react-icons/io';
 import { IoClose, IoTimeOutline } from 'react-icons/io5';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { MdReportProblem, MdSend, MdEditDocument } from 'react-icons/md';
-import { Progress } from '../data/Progress';
+import { Progress } from '../data/tprogress';
 import ProgressBar from '../components/ProgressBar';
 import 'aos/dist/aos.css';
 import DoughnutChart from '../components/DoughnutChart';

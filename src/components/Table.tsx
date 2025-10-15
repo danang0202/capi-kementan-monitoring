@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useTable, usePagination, useGlobalFilter, useFilters, useSortBy, Column } from 'react-table';
 import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
 
