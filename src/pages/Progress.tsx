@@ -1,7 +1,7 @@
 import React from 'react';
 import TableComponent from '../components/Table';
 import ProgressBar from '../components/ProgressBar';
-import { Progress as ProgressDataSource } from '../data/tprogress';
+import { Progress as ProgressDataSource } from '../data/progress';
 
 interface ProgressData {
   name: string;
