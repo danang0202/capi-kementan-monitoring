@@ -133,7 +133,7 @@ const Hasil: React.FC = () => {
             <a href="/">Dashboard</a>
           </li>
           <li>
-            <a href="/hasil">Hasil Pencacahan</a>
+            <a href="/webmon/hasil">Hasil Pencacahan</a>
           </li>
         </ul>
       </div>

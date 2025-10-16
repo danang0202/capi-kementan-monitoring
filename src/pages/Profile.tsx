@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
             <a href="/">Dashboard</a>
           </li>
           <li>
-            <a href="/profile">Profile</a>
+            <a href="/webmon/profile">Profile</a>
           </li>
         </ul>
       </div>
