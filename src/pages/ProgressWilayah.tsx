@@ -146,7 +146,7 @@ const ProgressWilayah: React.FC = () => {
 
       {/* Filters */}
       <div className="p-4 space-y-4 rounded-md  mb-4">
-        <div className="flex flex-col md:flex-row gap-2  md:justify-start">
+        <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-2  md:justify-start">
           {/* Provinsi */}
           <div className="flex flex-col ">
             <label className="text-sm mb-1">Provinsi</label>
@@ -189,7 +189,7 @@ const ProgressWilayah: React.FC = () => {
           </div>
 
           {/* Reset */}
-          <div className="flex items-center">
+          <div className="flex flex-col mt-[1.4rem]">
             <button className="btn btn-primary ml-2" onClick={resetAll}>
               <RiResetLeftLine className="text-lg" />
             </button>
