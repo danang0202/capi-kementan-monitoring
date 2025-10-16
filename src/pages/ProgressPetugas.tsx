@@ -12,6 +12,9 @@ interface ProgressData {
 interface ProgressItem {
   nomer: number;
   data: ProgressData;
+  name: string;
+  value: number;
+  max: number;
 }
 
 const ProgressPetugas: React.FC = () => {
@@ -19,17 +22,23 @@ const ProgressPetugas: React.FC = () => {
     () => [
       {
         Header: 'No',
-        accessor: 'nomer', // Nomor otomatis
+        accessor: 'nomer',
+        Cell: ({ value }: { value: number }) => <div className="text-center">{value}</div>,
       },
       {
-        Header: 'Nama',
-        accessor: 'name', // Nama dari data
+        Header: 'Nama Petugas',
+        accessor: 'name',
+        Cell: ({ value }: { value: string }) => <span className="font-medium text-gray-700">{value}</span>,
       },
       {
         Header: 'Progress',
         Cell: ({ row }: { row: { original: ProgressItem } }) => {
           const { value, max } = row.original;
-          return <ProgressBar value={value} max={max} label={true} percentage={true} />;
+          return (
+            <div className="w-full">
+              <ProgressBar value={value} max={max} label={true} percentage={true} />
+            </div>
+          );
         },
       },
     ],
@@ -37,29 +46,40 @@ const ProgressPetugas: React.FC = () => {
   );
 
   const data: ProgressItem[] = ProgressDataSource.map((item, index) => ({
-    nomer: index + 1, // Nomor otomatis
+    nomer: index + 1,
     ...item,
   }));
 
   return (
-    <div className="">
-      <h1 className="text-2xl font-bold mb-2">Progress Petugas</h1>
-      <div className="breadcrumbs text-sm mb-2">
-        <ul>
-          <li>
-            <a href="/">Dashboard</a>
-          </li>
-          <li>
-            <a href="/webmon/progress_petugas">Progress Petugas</a>
-          </li>
-        </ul>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Progress Petugas</h1>
+        <div className="text-sm breadcrumbs mt-2">
+          <ul className="text-gray-500">
+            <li>
+              <a href="/" className="hover:text-gray-700">
+                Dashboard
+              </a>
+            </li>
+            <li className="text-gray-700 font-medium">Progress Petugas</li>
+          </ul>
+        </div>
       </div>
-      <div className="p-4 space-y-2 rounded-md bg-white shadow-md my-2">
-        <h1 className="font-semibold text-xl ">Progress Keseluruhan </h1>
-        <hr className="w-full border-t-[1.7px] border-slate-300" />
+
+      {/* Card Progress Keseluruhan */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-800">Progress Keseluruhan</h2>
+          <span className="text-sm text-gray-500">35 dari 100 selesai</span>
+        </div>
         <ProgressBar max={100} value={35} label={true} percentage={true} />
       </div>
-      <TableComponent<ProgressItem> columns={columns} data={data} />
+
+      {/* Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <TableComponent<ProgressItem> columns={columns} data={data} />
+      </div>
     </div>
   );
 };

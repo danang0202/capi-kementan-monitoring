@@ -5,200 +5,208 @@ import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
 import { convertToIndonesianDate } from '../utils/convertDate';
 import { calculateRemainingTime } from '../utils/calculateRemainingTime';
 import { Period } from '../data/period';
-import { FaClipboardList, FaCheckCircle, FaArchive, FaWindowClose, FaCheckDouble } from 'react-icons/fa';
+import { FaClipboardList, FaCheckDouble } from 'react-icons/fa';
 import { IoIosTimer } from 'react-icons/io';
-import { IoClose, IoTimeOutline } from 'react-icons/io5';
-import { FaPeopleGroup } from 'react-icons/fa6';
-import { MdReportProblem, MdSend, MdEditDocument } from 'react-icons/md';
+import { IoTimeOutline } from 'react-icons/io5';
 import { Progress as ProgressPetugas } from '../data/progress';
 import { Progress as ProgressWilayah } from '../data/progressWilayah';
 import ProgressBar from '../components/ProgressBar';
 import 'aos/dist/aos.css';
 import DoughnutChart from '../components/DoughnutChart';
+import { FaPeopleGroup } from 'react-icons/fa6';
+
+/**
+ * Modern Minimalist Dashboard (DaisyUI + Tailwind)
+ * - Uses existing data & helper functions (Period, ProgressPetugas, ProgressWilayah, etc.)
+ * - Single-file replacement for previous Dashboard
+ * - Responsive, clean cards, thin progress bars, modern tabs
+ */
 
 const Dashboard: React.FC = () => {
-  const lowestThreePetugas = [...ProgressPetugas] // copy agar data asli tidak berubah
-    .map((item) => ({
+  // --- compute lowest 3 petugas (by percentage) ---
+  const lowestThreePetugas = [...ProgressPetugas]
+    .map((item: any) => ({
       ...item,
       percentage: item.max > 0 ? item.value / item.max : 0,
     }))
-    .sort((a, b) => a.percentage - b.percentage) // urut dari kecil ke besar
-    .slice(0, 3); // ambil 3 terendah
+    .sort((a: any, b: any) => a.percentage - b.percentage)
+    .slice(0, 3);
 
+  // --- aggregate wilayah by provinsi then lowest 3 ---
   const aggregatedByProvinsi = Object.values(
-    ProgressWilayah.reduce((acc, item) => {
+    ProgressWilayah.reduce((acc: Record<string, { provinsi: string; totalValue: number; totalMax: number }>, item: any) => {
       if (!acc[item.provinsi]) {
-        acc[item.provinsi] = {
-          provinsi: item.provinsi,
-          totalValue: 0,
-          totalMax: 0,
-        };
+        acc[item.provinsi] = { provinsi: item.provinsi, totalValue: 0, totalMax: 0 };
       }
       acc[item.provinsi].totalValue += item.value;
       acc[item.provinsi].totalMax += item.max;
       return acc;
-    }, {} as Record<string, { provinsi: string; totalValue: number; totalMax: number }>)
+    }, {})
   );
 
-  // Hitung persentase & urutkan dari terkecil
   const lowestThreeProvinsi = aggregatedByProvinsi
-    .map((p) => ({
-      ...p,
-      percentage: p.totalMax > 0 ? p.totalValue / p.totalMax : 0,
-    }))
-    .sort((a, b) => a.percentage - b.percentage)
+    .map((p: any) => ({ ...p, percentage: p.totalMax > 0 ? p.totalValue / p.totalMax : 0 }))
+    .sort((a: any, b: any) => a.percentage - b.percentage)
     .slice(0, 3);
 
   const [activeTab, setActiveTab] = useState<'petugas' | 'wilayah'>('petugas');
 
+  // remaining time convenience
+  const remaining = calculateRemainingTime(Period.end);
+
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-gray-500 text-sm">Dashboard</p>
-      {/* Greetings */}
-      <p className="font-extrabold text-2xl">Selamat datang !</p>
-      {/* Waktu */}
-      <div className="shadow p-4 bg-white rounded-md">
-        <div className="box-content py-2 md:flex block max-md:space-y-2 justify-between text-sm">
-          <div className="card-compact flex gap-2 items-center">
-            <div className="flex gap-2 items-center">
-              <IoIosTimer className="text-primary text-2xl md:text-4xl" />
-              <h2 className="font-semibold">Waktu Mulai : </h2>
-            </div>
-            <p>{convertToIndonesianDate(Period.start)}</p>
-          </div>
-          <div className=" card-compact flex gap-2 items-center">
-            <div className="flex gap-2 items-center">
-              <IoTimeOutline className="text-primary text-2xl md:text-4xl" />
-              <h2 className="font-semibold">Waktu Selesai : </h2>
-            </div>
-            <p>{convertToIndonesianDate(Period.end)}</p>
-          </div>
+    <div className="max-w-7xl mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <p className="text-sm text-slate-500">Dashboard</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800">Selamat datang!</h1>
+          <p className="mt-1 text-sm text-slate-500">Ringkasan pencacahan dan performa</p>
         </div>
 
-        <hr className="w-full border-t-[1.7px] border-slate-300" />
+        <div className="flex gap-3 items-center">
+          <div className="bg-white border border-slate-100 rounded-lg p-3 shadow-sm flex items-center gap-3">
+            <IoIosTimer className="text-primary text-2xl" />
+            <div>
+              <div className="text-xs text-slate-500">Waktu Mulai</div>
+              <div className="text-sm font-medium">{convertToIndonesianDate(Period.start)}</div>
+            </div>
+          </div>
 
-        <div className="card py-4 md:flex md:flex-row justify-between items-center max-md:space-y-2">
-          <h1 className="">{GetTanggalIndonesia()}</h1>
+          <div className="bg-white border border-slate-100 rounded-lg p-3 shadow-sm flex items-center gap-3">
+            <IoTimeOutline className="text-primary text-2xl" />
+            <div>
+              <div className="text-xs text-slate-500">Waktu Selesai</div>
+              <div className="text-sm font-medium">{convertToIndonesianDate(Period.end)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Date & period status */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <div className="text-sm text-slate-500">Hari ini</div>
+          <div className="text-base font-medium text-slate-700">{GetTanggalIndonesia()}</div>
+        </div>
+
+        <div className="flex items-center gap-3">
           {new Date() < Period.start && <Button variant="primary" label="Periode Survei Belum Dimulai" />}
+
           {new Date() >= Period.start && new Date() <= Period.end && (
-            <p className="text-primary font-semibold">Tersisa {`${calculateRemainingTime(Period.end).days.toString()} hari ${calculateRemainingTime(Period.end).hours.toString()} jam`} </p>
+            <div className="rounded-md px-3 py-2 bg-slate-50 border border-slate-100 text-slate-700 text-sm font-medium">
+              <span className="text-primary font-semibold">Tersisa</span> <span className="ml-1">{`${remaining.days} hari ${remaining.hours} jam`}</span>
+            </div>
           )}
+
           {new Date() > Period.end && <Button label="Periode Survei Telah Selesai" variant="primary" />}
         </div>
       </div>
 
-      {/* Jumlah petugas sampel */}
-      <div className="box-content py-2 md:grid md:grid-cols-2 gap-4 max-md:space-y-2 ">
-        <div className=" shadow p-4 card-compact flex gap-2  items-center bg-white rounded-md ">
-          <FaClipboardList className="text-primary text-2xl md:text-4xl" />
-          <div className="">
-            <h2 className="font-semibold">Jumlah Sampel</h2>
-            <p>45 Orang</p>
+      {/* Quick info cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="p-3 rounded-lg bg-gradient-to-tr from-primary/10 to-primary/5 text-primary">
+            <FaClipboardList className="text-2xl" />
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">Jumlah Sampel</div>
+            <div className="text-lg font-semibold text-slate-800">45 Orang</div>
           </div>
         </div>
-        <div className=" shadow p-4 card-compact flex gap-2 items-center bg-white rounded-md ">
-          <FaPeopleGroup className="text-primary text-2xl md:text-4xl" />
-          <div className="">
-            <h2 className="font-semibold">Jumlah Petugas</h2>
-            <p>20 Orang</p>
+
+        <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="p-3 rounded-lg bg-gradient-to-tr from-success/10 to-success/5 text-success">
+            <FaPeopleGroup className="text-2xl" />
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">Jumlah Petugas</div>
+            <div className="text-lg font-semibold text-slate-800">20 Orang</div>
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="p-3 rounded-lg bg-gradient-to-tr from-info/10 to-info/5 text-info">
+            <FaCheckDouble className="text-2xl" />
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">Tercacah</div>
+            <div className="text-lg font-semibold text-slate-800">35 Sampel</div>
           </div>
         </div>
       </div>
 
-      {/* Ringkasan Hasil Cacah */}
-      {/* <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-2 md:gap-4 ">
-        <div className=" shadow p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
-          <FaArchive className="text-info text-6xl mx-auto" />
-          <div className="md:w-3/5 flex justify-center">
-            <div className="text-center">
-              <h2 className="font-semibold">Total Submissions</h2>
-              <p className="text-3xl text-info font-semibold">20</p>
-              <p className="">Terkumpul</p>
-            </div>
-          </div>
+      {/* Progress Section */}
+      <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-slate-800">Progress Pencacahan</h2>
+          <div className="text-sm text-slate-500">Overview dan detail per petugas / wilayah</div>
         </div>
-        <div className="grid grid-flow-row gap-2">
-          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
-            <MdSend className="text-info text-3xl" />
-            <h2 className="">Diterima</h2>
-            <p className=" text-info font-semibold badge badge-ghost">14</p>
-          </div>
-          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
-            <MdEditDocument className="text-warning text-3xl" />
-            <h2 className="">Diubah</h2>
-            <p className=" text-warning font-semibold badge badge-ghost">1</p>
-          </div>
-        </div>
-        <div className="grid grid-flow-row gap-2">
-          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
-            <MdReportProblem className="text-orange-600 text-3xl" />
-            <h2 className="">Bermasalah</h2>
-            <p className=" text-orange-600 font-semibold badge badge-ghost">0</p>
-          </div>
-          <div className=" shadow p-4 py-4 card-compact flex gap-2 items-center bg-white rounded-md ">
-            <FaWindowClose className="text-error text-3xl" />
-            <h2 className="">Ditolak</h2>
-            <p className=" text-error font-semibold badge badge-ghost">0</p>
-          </div>
-        </div>
-        <div className="shadow p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
-          <FaCheckCircle className="text-success text-6xl mx-auto" />
-          <div className="md:w-3/5 flex justify-center">
-            <div className="text-center">
-              <h2 className="font-semibold">Total Approved</h2>
-              <p className="text-3xl text-success font-semibold">14</p>
-              <p className="">Approved</p>
-            </div>
-          </div>
-        </div>
-      </div> */}
 
-      {/* Progress Pencacahan */}
-      <div className="p-4 space-y-2 rounded-md bg-white shadow">
-        <h1 className="font-semibold text-xl ">Progress Pencacahan </h1>
-        <hr className="w-full border-t-[1.7px] border-slate-300" />
-        <div className="md:flex my-4 space-y-4 md:space-y-0 md:space-x-2">
-          <div className="md:w-1/2 w-full flex justify-center items-start">
-            <div className="w-full space-y-4">
-              <h2 className="font-semibold text-lg my-2 text">Progress Keseluruhan</h2>
-              <DoughnutChart dataCacah={35} dataBelumCacah={65} />
-              <div className="grid grid-cols-1 gap-4">
-                <div className="flex items-center justify-start btn btn-outline text-primary">
-                  <FaCheckDouble /> Tercacah : 35 sampel
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left: Chart */}
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-full bg-slate-50 border border-slate-100 rounded-xl p-4 flex flex-col items-center">
+              <h3 className="text-sm text-slate-600 mb-2">Progress Keseluruhan</h3>
+              <div className="w-48 h-48">
+                <DoughnutChart dataCacah={35} dataBelumCacah={65} />
+              </div>
+
+              <div className="mt-4 w-full grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="flex items-center gap-2 p-2 rounded-md border border-slate-100 bg-white">
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                  <div className="text-sm text-slate-700">Tercacah</div>
+                  <div className="ml-auto text-sm font-medium text-slate-800">35</div>
                 </div>
-                <div className="flex items-center justify-start btn btn-outline text-gray-500">
-                  <IoClose /> Belum Tercacah : 65 sampel
+                <div className="flex items-center gap-2 p-2 rounded-md border border-slate-100 bg-white">
+                  <div className="w-2 h-2 rounded-full bg-slate-400" />
+                  <div className="text-sm text-slate-700">Belum Tercacah</div>
+                  <div className="ml-auto text-sm font-medium text-slate-800">65</div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="md:w-1/2 w-full">
-            {/* TAB HEADER */}
-            <div className="flex border-b">
-              <button onClick={() => setActiveTab('petugas')} className={`flex-1 py-2 text-center font-medium ${activeTab === 'petugas' ? 'border-b-2 border-primary text-primary' : 'text-slate-500'}`}>
+
+          {/* Right: Tabs for Petugas / Wilayah */}
+          <div>
+            <div className="bg-slate-50 p-2 rounded-lg flex gap-2">
+              <button onClick={() => setActiveTab('petugas')} className={`flex-1 py-2 rounded-md text-sm font-medium transition ${activeTab === 'petugas' ? 'bg-white shadow-sm text-primary' : 'text-slate-600'}`}>
                 Progress Petugas
               </button>
-
-              <button onClick={() => setActiveTab('wilayah')} className={`flex-1 py-2 text-center font-medium ${activeTab === 'wilayah' ? 'border-b-2 border-primary text-primary' : 'text-slate-500'}`}>
+              <button onClick={() => setActiveTab('wilayah')} className={`flex-1 py-2 rounded-md text-sm font-medium transition ${activeTab === 'wilayah' ? 'bg-white shadow-sm text-primary' : 'text-slate-600'}`}>
                 Progress Wilayah
               </button>
             </div>
 
-            {/* TAB CONTENT */}
-            <div className="mt-4">
+            <div className="mt-4 space-y-4">
               {activeTab === 'petugas' && (
                 <>
-                  <div className="block space-y-6">
-                    {lowestThreePetugas.slice(0, 3).map((item) => (
-                      <div key={item.id} className="block shadow p-4">
-                        <h2 className="font-semibold text-lg text-slate-700">{item.name}</h2>
-                        <ProgressBar max={item.max} value={item.value} label percentage />
+                  {lowestThreePetugas.map((item: any) => (
+                    <div key={item.id || item.name} className="bg-white border border-slate-100 rounded-xl p-3 shadow-sm">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <div className="text-sm font-semibold text-slate-800">{item.name}</div>
+                          <div className="text-xs text-slate-500 mt-1">
+                            Kurang {item.max - item.value} dari {item.max} sampel
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium text-slate-700">{Math.round((item.percentage || 0) * 100)}%</div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="w-full flex justify-end">
-                    <Link to="/progress_petugas" className="my-4 btn btn-primary">
-                      Lihat Progress Petugas Lainnya
+
+                      {/* thin & elegant progress bar wrapper */}
+                      <div className="mt-3">
+                        {/* Keep using existing ProgressBar component; container makes it thin */}
+                        <div className="h-full rounded-full overflow-hidden ">
+                          {/* If ProgressBar renders its own bar, keep it; otherwise we still wrap it */}
+                          <ProgressBar max={item.max} value={item.value} percentage={false} label={false} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="flex justify-end">
+                    <Link to="/progress_petugas" className="btn btn-sm btn-ghost">
+                      Lihat Progress Petugas Lainnya →
                     </Link>
                   </div>
                 </>
@@ -206,17 +214,29 @@ const Dashboard: React.FC = () => {
 
               {activeTab === 'wilayah' && (
                 <>
-                  <div className="block space-y-6">
-                    {lowestThreeProvinsi.slice(0, 3).map((item) => (
-                      <div key={item.provinsi} className="block shadow p-4">
-                        <h2 className="font-semibold text-lg text-slate-700">{item.provinsi}</h2>
-                        <ProgressBar max={item.totalMax} value={item.totalValue} label percentage />
+                  {lowestThreeProvinsi.map((item: any) => (
+                    <div key={item.provinsi} className="bg-white border border-slate-100 rounded-xl p-3 shadow-sm">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <div className="text-sm font-semibold text-slate-800">{item.provinsi}</div>
+                          <div className="text-xs text-slate-500 mt-1">
+                            Kurang {item.totalMax - item.totalValue} dari {item.totalMax} sampel
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium text-slate-700">{Math.round((item.percentage || 0) * 100)}%</div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="w-full flex justify-end">
-                    <Link to="/progress_wilayah" className="my-4 btn btn-primary">
-                      Lihat Progress Wilayah Lainnya
+
+                      <div className="mt-3">
+                        <div className="h-full rounded-full overflow-hidden ">
+                          <ProgressBar max={item.totalMax} value={item.totalValue} percentage={false} label={false} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="flex justify-end">
+                    <Link to="/progress_wilayah" className="btn btn-sm btn-ghost">
+                      Lihat Progress Wilayah Lainnya →
                     </Link>
                   </div>
                 </>

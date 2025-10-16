@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// import { useAuth } from '../context/AuthContext';
 import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import { RiProfileLine } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
@@ -13,20 +12,12 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  // const { logout } = useAuth();
-  const { logout } = { logout: () => (window.location.href = '/webmon/login') }; // Placeholder if useAuth is not available
 
-  const handleLogout = () => {
-    logout();
-  };
+  const { logout } = { logout: () => (window.location.href = '/webmon/login') };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const handleLogout = () => logout();
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -36,47 +27,51 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
+
   return (
     <>
-      {/* Desktop */}
-      <nav className="navbar bg-base-100/90 z-10 shadow-md flex items-center justify-between px-4 lg:px-36 fixed top-0 w-full">
-        <div className="justify-start flex items-center gap-2 px-4 ">
-          <Link to="/" className="text-xl font-bold flex items-center gap-2">
-            <img src="/webmon/public/logo kementan.png" alt="logo kementan" height={50} width={50} />
-            <div className="md:block text-sm font-normal hidden">
-              <p className="text-lg font-bold">Monitoring Survei</p>
-              Kementrian Pertanian RI
+      {/* Desktop Navbar */}
+      <nav className="navbar fixed top-0 w-full z-20 bg-base-100/70 backdrop-blur-md border-b border-base-300/50 shadow-sm px-4 lg:px-36">
+        <div className="flex-1 flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2">
+            <img src="/webmon/public/logo kementan.png" alt="logo kementan" height={45} width={45} />
+            <div className="hidden md:block leading-tight">
+              <p className="font-bold text-lg">Monitoring Survei</p>
+              <p className="text-xs">Kementrian Pertanian RI</p>
             </div>
           </Link>
         </div>
-        <div className="hidden  md:flex items-center justify-center">
-          <ul className="menu menu-horizontal px-1 ">
+
+        {/* Menu Desktop */}
+        <div className="hidden md:flex">
+          <ul className="menu menu-horizontal gap-2">
             {menuItems.map((item, index) => (
               <li key={index}>
-                <Link to={item.path} className={isActive(item.path) ? 'text-primary font-semibold' : ''}>
+                <Link to={item.path} className={`px-3 py-2 transition-all ${isActive(item.path) ? 'font-semibold border-b-2 border-primary' : 'text-base-content/70 hover:text-base-content'}`}>
                   {item.name}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-        <div className="justify-end flex items-center px-4  relative" ref={dropdownRef}>
+
+        {/* User + Hamburger */}
+        <div className="flex items-center relative" ref={dropdownRef}>
           <div className="hidden md:block">
-            <FaUser size={24} className="text-primary hover:text-green-900 cursor-pointer" onClick={toggleDropdown} />
+            <FaUser size={22} className=" ml-4 text-primary cursor-pointer hover:scale-105 transition" onClick={toggleDropdown} />
             {isDropdownOpen && (
-              <ul className="absolute right-0 z-50 dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+              <ul className="absolute right-0 mt-3 z-50 menu bg-base-100 shadow-lg rounded-xl w-52 p-2">
                 <li>
                   <Link to="/profile" className="flex items-center gap-2" onClick={() => setIsDropdownOpen(false)}>
                     <RiProfileLine className="text-primary" />
                     Profil Saya
                   </Link>
                 </li>
+                <div className="divider my-1"></div>
                 <li>
                   <button className="flex items-center gap-2 text-error" onClick={handleLogout}>
                     <CiLogout className="text-error" />
@@ -86,8 +81,9 @@ const Navbar: React.FC = () => {
               </ul>
             )}
           </div>
-          {/* Mobile Menu Button */}
-          <button className="block md:hidden text-primary focus:outline-none" onClick={toggleMobileMenu}>
+
+          {/* Mobile Hamburger */}
+          <button className="md:hidden text-primary ml-3" onClick={toggleMobileMenu}>
             {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
@@ -95,15 +91,16 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="bg-base-100 shadow-md fixed top-16 left-0 w-full z-20 md:hidden">
-          <ul className="menu p-4">
+        <div className="md:hidden fixed top-16 w-full bg-base-100 shadow-lg z-10 animate-fade-down p-4">
+          <ul className="menu space-y-2">
             {menuItems.map((item, index) => (
               <li key={index}>
-                <Link to={item.path} className={isActive(item.path) ? 'text-primary font-semibold' : ''} onClick={toggleMobileMenu}>
+                <Link to={item.path} className={`${isActive(item.path) ? 'font-semibold text-primary' : 'text-base-content/70'}`} onClick={toggleMobileMenu}>
                   {item.name}
                 </Link>
               </li>
             ))}
+            <div className="divider"></div>
             <li>
               <Link to="/profile" className="flex items-center gap-2" onClick={toggleMobileMenu}>
                 <RiProfileLine className="text-primary" />
