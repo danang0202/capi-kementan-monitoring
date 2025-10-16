@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
@@ -10,12 +10,47 @@ import { IoIosTimer } from 'react-icons/io';
 import { IoClose, IoTimeOutline } from 'react-icons/io5';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { MdReportProblem, MdSend, MdEditDocument } from 'react-icons/md';
-import { Progress } from '../data/Progress';
+import { Progress as ProgressPetugas } from '../data/progress';
+import { Progress as ProgressWilayah } from '../data/progressWilayah';
 import ProgressBar from '../components/ProgressBar';
 import 'aos/dist/aos.css';
 import DoughnutChart from '../components/DoughnutChart';
 
 const Dashboard: React.FC = () => {
+  const lowestThreePetugas = [...ProgressPetugas] // copy agar data asli tidak berubah
+    .map((item) => ({
+      ...item,
+      percentage: item.max > 0 ? item.value / item.max : 0,
+    }))
+    .sort((a, b) => a.percentage - b.percentage) // urut dari kecil ke besar
+    .slice(0, 3); // ambil 3 terendah
+
+  const aggregatedByProvinsi = Object.values(
+    ProgressWilayah.reduce((acc, item) => {
+      if (!acc[item.provinsi]) {
+        acc[item.provinsi] = {
+          provinsi: item.provinsi,
+          totalValue: 0,
+          totalMax: 0,
+        };
+      }
+      acc[item.provinsi].totalValue += item.value;
+      acc[item.provinsi].totalMax += item.max;
+      return acc;
+    }, {} as Record<string, { provinsi: string; totalValue: number; totalMax: number }>)
+  );
+
+  // Hitung persentase & urutkan dari terkecil
+  const lowestThreeProvinsi = aggregatedByProvinsi
+    .map((p) => ({
+      ...p,
+      percentage: p.totalMax > 0 ? p.totalValue / p.totalMax : 0,
+    }))
+    .sort((a, b) => a.percentage - b.percentage)
+    .slice(0, 3);
+
+  const [activeTab, setActiveTab] = useState<'petugas' | 'wilayah'>('petugas');
+
   return (
     <div className="flex flex-col gap-4">
       <p className="text-gray-500 text-sm">Dashboard</p>
@@ -71,7 +106,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Ringkasan Hasil Cacah */}
-      <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-2 md:gap-4 ">
+      {/* <div className="box-content py-2 grid md:grid-cols-4 grid-cols-2 gap-2 md:gap-4 ">
         <div className=" shadow p-4 py-8 card-compact md:flex gap-2 items-center bg-white rounded-md ">
           <FaArchive className="text-info text-6xl mx-auto" />
           <div className="md:w-3/5 flex justify-center">
@@ -116,7 +151,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Progress Pencacahan */}
       <div className="p-4 space-y-2 rounded-md bg-white shadow">
@@ -138,19 +173,54 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="md:w-1/2 w-full">
-            <h2 className="font-semibold text-lg my-2">Detail Progress Per Petugas</h2>
-            <div className="block space-y-6">
-              {Progress.slice(0, 3).map((item) => (
-                <div className="block shadow p-4">
-                  <h2 className="font-semibold text-lg text-slate-700">{item.name}</h2>
-                  <ProgressBar key={item.id} max={item.max} value={item.value} label={true} percentage={true} />
-                </div>
-              ))}
+            {/* TAB HEADER */}
+            <div className="flex border-b">
+              <button onClick={() => setActiveTab('petugas')} className={`flex-1 py-2 text-center font-medium ${activeTab === 'petugas' ? 'border-b-2 border-primary text-primary' : 'text-slate-500'}`}>
+                Progress Petugas
+              </button>
+
+              <button onClick={() => setActiveTab('wilayah')} className={`flex-1 py-2 text-center font-medium ${activeTab === 'wilayah' ? 'border-b-2 border-primary text-primary' : 'text-slate-500'}`}>
+                Progress Wilayah
+              </button>
             </div>
-            <div className="w-full flex justify-end">
-              <Link to={'/progress'} className="my-4 btn  btn-primary">
-                Lihat Progress Petugas Lainnya
-              </Link>
+
+            {/* TAB CONTENT */}
+            <div className="mt-4">
+              {activeTab === 'petugas' && (
+                <>
+                  <div className="block space-y-6">
+                    {lowestThreePetugas.slice(0, 3).map((item) => (
+                      <div key={item.id} className="block shadow p-4">
+                        <h2 className="font-semibold text-lg text-slate-700">{item.name}</h2>
+                        <ProgressBar max={item.max} value={item.value} label percentage />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="w-full flex justify-end">
+                    <Link to="/progress_petugas" className="my-4 btn btn-primary">
+                      Lihat Progress Petugas Lainnya
+                    </Link>
+                  </div>
+                </>
+              )}
+
+              {activeTab === 'wilayah' && (
+                <>
+                  <div className="block space-y-6">
+                    {lowestThreeProvinsi.slice(0, 3).map((item) => (
+                      <div key={item.provinsi} className="block shadow p-4">
+                        <h2 className="font-semibold text-lg text-slate-700">{item.provinsi}</h2>
+                        <ProgressBar max={item.totalMax} value={item.totalValue} label percentage />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="w-full flex justify-end">
+                    <Link to="/progress_wilayah" className="my-4 btn btn-primary">
+                      Lihat Progress Wilayah Lainnya
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

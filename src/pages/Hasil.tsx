@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TableComponent from '../components/Table';
-import { FaArrowRight, FaEye } from 'react-icons/fa';
+import { FaArrowRight, FaDownload, FaEye } from 'react-icons/fa';
 import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
 
 interface SubmissionData {
@@ -49,28 +49,28 @@ const Hasil: React.FC = () => {
   ]);
 
   // Fungsi untuk mendapatkan kelas warna berdasarkan status
-  const getStatusClass = (status: string) => {
-    switch (status) {
-      case 'Diterima':
-        return 'text-gray-800 bg-gray-200';
-      case 'Bermasalah':
-        return 'text-orange-600 hover:bg-orange-500';
-      case 'Diubah':
-        return 'btn-warning';
-      case 'Ditolak':
-        return 'btn-error';
-      case 'Diapprove':
-        return 'btn-success text-white';
-      default:
-        return 'btn-ghost';
-    }
-  };
+  // const getStatusClass = (status: string) => {
+  //   switch (status) {
+  //     case 'Diterima':
+  //       return 'text-gray-800 bg-gray-200';
+  //     case 'Bermasalah':
+  //       return 'text-orange-600 hover:bg-orange-500';
+  //     case 'Diubah':
+  //       return 'btn-warning';
+  //     case 'Ditolak':
+  //       return 'btn-error';
+  //     case 'Diapprove':
+  //       return 'btn-success text-white';
+  //     default:
+  //       return 'btn-ghost';
+  //   }
+  // };
 
   // Fungsi untuk mengubah status
-  const handleStatusChange = (id: number, newStatus: string) => {
-    const updatedData = data.map((item) => (item.id === id ? { ...item, status: newStatus } : item));
-    setData(updatedData);
-  };
+  // const handleStatusChange = (id: number, newStatus: string) => {
+  //   const updatedData = data.map((item) => (item.id === id ? { ...item, status: newStatus } : item));
+  //   setData(updatedData);
+  // };
 
   // Definisi kolom untuk `react-table`
   const columns: Column<SubmissionData>[] = [
@@ -87,41 +87,41 @@ const Hasil: React.FC = () => {
       Header: 'Label Rumah Tangga',
       accessor: 'labelRumahTangga',
     },
-    {
-      Header: 'Status',
-      accessor: 'status',
-      Cell: ({ row }: any) => {
-        const { id, status } = row.original;
-        return (
-          <div className={`dropdown dropdown-hover ${id === 1 ? 'dropdown-end' : 'dropdown-top'}`}>
-            <label tabIndex={0} className={`btn ${getStatusClass(status)} btn-sm btn-outline bg-white`}>
-              {status}
-            </label>
-            <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52  overflow-y-auto">
-              {['Diterima', 'Bermasalah', 'Diubah', 'Ditolak', 'Diapprove'].map((newStatus) => (
-                <li key={newStatus}>
-                  <button className="btn btn-ghost btn-sm " onClick={() => handleStatusChange(id, newStatus)}>
-                    {newStatus}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      },
-    },
-    {
-      Header: 'Aksi',
-      accessor: 'id',
-      Cell: ({ row }: any) => {
-        return (
-          <button className="btn lg:btn-sm btn-md font-semibold btn-primary ">
-            Lihat
-            <FaEye className="text-lg" />
-          </button>
-        );
-      },
-    },
+    // {
+    //   Header: 'Status',
+    //   accessor: 'status',
+    //   Cell: ({ row }: any) => {
+    //     const { id, status } = row.original;
+    //     return (
+    //       <div className={`dropdown dropdown-hover ${id === 1 ? 'dropdown-end' : 'dropdown-top'}`}>
+    //         <label tabIndex={0} className={`btn ${getStatusClass(status)} btn-sm btn-outline bg-white`}>
+    //           {status}
+    //         </label>
+    //         <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52  overflow-y-auto">
+    //           {['Diterima', 'Bermasalah', 'Diubah', 'Ditolak', 'Diapprove'].map((newStatus) => (
+    //             <li key={newStatus}>
+    //               <button className="btn btn-ghost btn-sm " onClick={() => handleStatusChange(id, newStatus)}>
+    //                 {newStatus}
+    //               </button>
+    //             </li>
+    //           ))}
+    //         </ul>
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   Header: 'Aksi',
+    //   accessor: 'id',
+    //   Cell: ({ row }: any) => {
+    //     return (
+    //       <button className="btn lg:btn-sm btn-md font-semibold btn-primary ">
+    //         Lihat
+    //         <FaEye className="text-lg" />
+    //       </button>
+    //     );
+    //   },
+    // },
   ];
 
   return (
@@ -140,7 +140,7 @@ const Hasil: React.FC = () => {
 
       <hr className="w-full border-t-[1.7px] border-slate-300 mb-4" />
 
-      <TableComponent<SubmissionData> columns={columns} data={data} />
+      <TableComponent<SubmissionData> columns={columns} data={data} isDownloadable={true} />
     </div>
   );
 };

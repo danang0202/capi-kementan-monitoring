@@ -11,6 +11,11 @@ interface DoughnutChartProps {
   dataBelumCacah: number;
 }
 
+type tooltipItem = {
+  label: string;
+  raw: number;
+};
+
 const DoughnutChart: React.FC<DoughnutChartProps> = ({ dataCacah, dataBelumCacah }) => {
   // Data chart
   const data = {
@@ -34,7 +39,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ dataCacah, dataBelumCacah
       },
       tooltip: {
         callbacks: {
-          label: function (tooltipItem: any) {
+          label: function (tooltipItem: tooltipItem) {
             return `${tooltipItem.label}: ${tooltipItem.raw}%`;
           },
         },
