@@ -50,7 +50,7 @@ const ProgressPetugas: React.FC = () => {
             <a href="/">Dashboard</a>
           </li>
           <li>
-            <a href="/progress_petugas">Progress Petugas</a>
+            <a href="/webmon/progress_petugas">Progress Petugas</a>
           </li>
         </ul>
       </div>

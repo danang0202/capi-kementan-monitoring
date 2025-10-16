@@ -143,7 +143,16 @@ const ProgressWilayah: React.FC = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-2">Progress Wilayah</h1>
-
+      <div className="breadcrumbs text-sm mb-2">
+        <ul>
+          <li>
+            <a href="/">Dashboard</a>
+          </li>
+          <li>
+            <a href="/webmon/progress_wilayah">Progress Wilayah</a>
+          </li>
+        </ul>
+      </div>
       {/* Filters */}
       <div className="p-4 space-y-4 rounded-md  mb-4">
         <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-2  md:justify-start">
