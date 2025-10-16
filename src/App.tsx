@@ -38,41 +38,41 @@ const AppContent: React.FC = () => {
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Dashboard />
+            // </PrivateRoute>
           }
         />
         <Route
           path="/progress_petugas"
           element={
-            <PrivateRoute>
-              <ProgressPetugas />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <ProgressPetugas />
+            // </PrivateRoute>
           }
         />
         <Route
           path="/progress_wilayah"
           element={
-            <PrivateRoute>
-              <ProgressWilayah />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <ProgressWilayah />
+            // </PrivateRoute>
           }
         />
         <Route
           path="/hasil"
           element={
-            <PrivateRoute>
-              <Hasil />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Hasil />
+            // </PrivateRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Profile />
+            // </PrivateRoute>
           }
         />
         <Route path="/login" element={<Login />} />
