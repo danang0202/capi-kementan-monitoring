@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/Not_Found';
-import Progress from './pages/Progress';
+import Progress from './pages/ProgressPetugas';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Hasil from './pages/Hasil';
@@ -10,6 +10,8 @@ import MainLayout from './layouts/MainLayout';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ProgressPetugas from './pages/ProgressPetugas';
+import ProgressWilayah from './pages/ProgressWilayah';
 
 // Komponen untuk proteksi rute
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -42,10 +44,18 @@ const AppContent: React.FC = () => {
           }
         />
         <Route
-          path="/progress"
+          path="/progress_petugas"
           element={
             <PrivateRoute>
-              <Progress />
+              <ProgressPetugas />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/progress_wilayah"
+          element={
+            <PrivateRoute>
+              <ProgressWilayah />
             </PrivateRoute>
           }
         />
@@ -76,7 +86,7 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <Router basename='/webmon/'>
+    <Router basename="/webmon">
       <AuthProvider>
         <AppContent />
       </AuthProvider>

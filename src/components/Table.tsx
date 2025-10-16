@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useTable, usePagination, useGlobalFilter, useFilters, useSortBy, Column } from 'react-table';
-import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
+import { FaSortUp, FaSortDown, FaSort, FaDownload } from 'react-icons/fa';
+import Alert from './Alert';
 
 // Komponen untuk input pencarian dengan rekomendasi
 const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestions, setInputValue }: { globalFilter: string; setGlobalFilter: (filter: string) => void; suggestions: string[]; setInputValue: (value: string) => void }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   return (
-    <div className="relative w-10/12">
+    <div className="relative w-full">
       <input
         value={globalFilter || ''}
         onChange={(e) => {
@@ -43,9 +44,11 @@ const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestion
 interface TableProps<T extends object> {
   columns: Column<T>[];
   data: T[];
+  downloadUrl?: string; // URL untuk mengunduh data (jika ada)
+  isDownloadable?: boolean; // Menentukan apakah tombol unduh ditampilkan
 }
 
-const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
+const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownloadable }: TableProps<T>) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -75,33 +78,69 @@ const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
     setSuggestions(filteredSuggestions);
   };
 
+  const { showConfirmation, showAlert } = Alert();
+
+  const handleDownload = () => {
+    showConfirmation({
+      title: 'Konfirmasi Unduh',
+      text: 'Apakah Anda yakin ingin mengunduh data ini?',
+      icon: 'warning',
+      confirmButtonText: 'Ya, Unduh',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        showAlert({
+          title: 'Berhasil',
+          text: 'Hasil pencacahan berhasil diunduh',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+        // if (downloadUrl) {
+        //   window.location.href = downloadUrl;
+        // } else {
+        //   console.error('URL unduh tidak tersedia.');
+        // }
+      }
+    });
+  };
+
   return (
-    <div className="overflow-x-auto overflow-y-auto">
+    <div className="overflow-x-auto overflow-y-auto w-full">
       {/* Input Pencarian */}
-      <div className="flex justify-between">
-        <GlobalFilterWithSuggestions
-          globalFilter={globalFilter}
-          setGlobalFilter={setGlobalFilter}
-          suggestions={suggestions}
-          setInputValue={(value) => {
-            setInputValue(value);
-            updateSuggestions(value);
-          }}
-        />
-        <select
-          className="select select-bordered"
-          value={rowsPerPage}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-            setRowsPerPage(Number(e.target.value));
-          }}
-        >
-          {[5, 10, 20].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Tampilkan {pageSize}
-            </option>
-          ))}
-        </select>
+      <div className="md:flex justify-between max-md:space-y-2 w-full">
+        <div className="flex flex-1 w-full">
+          <GlobalFilterWithSuggestions
+            globalFilter={globalFilter}
+            setGlobalFilter={setGlobalFilter}
+            suggestions={suggestions}
+            setInputValue={(value) => {
+              setInputValue(value);
+              updateSuggestions(value);
+            }}
+          />
+        </div>
+        <div className="flex flex-wrap max-xs:space-y-2">
+          <select
+            className={`select select-bordered ${isDownloadable ? 'ml-2' : ''}`}
+            value={rowsPerPage}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setRowsPerPage(Number(e.target.value));
+            }}
+          >
+            {[5, 10, 20].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Tampilkan {pageSize}
+              </option>
+            ))}
+          </select>
+
+          {isDownloadable && (
+            <button onClick={handleDownload} className="btn btn-primary btn-md mx-2 ">
+              Unduh hasil <FaDownload className="text-sm" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Tabel */}

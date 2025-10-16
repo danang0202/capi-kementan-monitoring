@@ -14,7 +14,7 @@ interface ProgressItem {
   data: ProgressData;
 }
 
-const Progress: React.FC = () => {
+const ProgressPetugas: React.FC = () => {
   const columns = React.useMemo(
     () => [
       {
@@ -43,14 +43,14 @@ const Progress: React.FC = () => {
 
   return (
     <div className="">
-      <h1 className="text-2xl font-bold mb-2">Progress Pencacahan</h1>
+      <h1 className="text-2xl font-bold mb-2">Progress Petugas</h1>
       <div className="breadcrumbs text-sm mb-2">
         <ul>
           <li>
             <a href="/">Dashboard</a>
           </li>
           <li>
-            <a href="/progress">Progress Pencacahan</a>
+            <a href="/progress_petugas">Progress Petugas</a>
           </li>
         </ul>
       </div>
@@ -64,4 +64,4 @@ const Progress: React.FC = () => {
   );
 };
 
-export default Progress;
+export default ProgressPetugas;
