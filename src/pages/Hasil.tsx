@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TableComponent from '../components/Table';
-import { FaArrowRight, FaDownload, FaEye } from 'react-icons/fa';
-import { GetTanggalIndonesia } from '../utils/getTanggalIndonesia';
+import { FaEye, FaDownload } from 'react-icons/fa';
+import Alert from '../components/Alert';
 
 interface SubmissionData {
   id: number;
@@ -12,12 +12,10 @@ interface SubmissionData {
 }
 
 const Hasil: React.FC = () => {
-  // Data awal
-  const [data, setData] = useState<SubmissionData[]>([
+  const [data] = useState<SubmissionData[]>([
     {
       id: 1,
       timestamp: '3 Mar 2024, 06:15:51',
-
       submitter: 'IRSYAD FADHIL ASYRAF',
       labelRumahTangga: 'PEMECUTAN_KLOD.064B.33',
       status: 'Ditolak',
@@ -25,7 +23,6 @@ const Hasil: React.FC = () => {
     {
       id: 2,
       timestamp: '3 Mar 2024, 01:22:35',
-
       submitter: 'IRSYAD FADHIL ASYRAF',
       labelRumahTangga: 'KARANGASEM.002B.14',
       status: 'Diterima',
@@ -33,7 +30,6 @@ const Hasil: React.FC = () => {
     {
       id: 3,
       timestamp: '3 Mar 2024, 01:22:35',
-
       submitter: 'IRSYAD FADHIL ASYRAF',
       labelRumahTangga: 'KARANGASEM.002B.14',
       status: 'Diterima',
@@ -41,106 +37,104 @@ const Hasil: React.FC = () => {
     {
       id: 4,
       timestamp: '3 Mar 2024, 01:22:35',
-
       submitter: 'IRSYAD FADHIL ASYRAF',
       labelRumahTangga: 'KARANGASEM.002B.14',
       status: 'Diterima',
     },
   ]);
 
-  // Fungsi untuk mendapatkan kelas warna berdasarkan status
-  // const getStatusClass = (status: string) => {
-  //   switch (status) {
-  //     case 'Diterima':
-  //       return 'text-gray-800 bg-gray-200';
-  //     case 'Bermasalah':
-  //       return 'text-orange-600 hover:bg-orange-500';
-  //     case 'Diubah':
-  //       return 'btn-warning';
-  //     case 'Ditolak':
-  //       return 'btn-error';
-  //     case 'Diapprove':
-  //       return 'btn-success text-white';
-  //     default:
-  //       return 'btn-ghost';
-  //   }
+  const { showConfirmation, showAlert } = Alert();
+
+  const handleDownload = () => {
+    showConfirmation({
+      title: 'Konfirmasi Unduh',
+      text: 'Apakah Anda yakin ingin mengunduh data ini?',
+      icon: 'warning',
+      confirmButtonText: 'Ya, Unduh',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        showAlert({
+          title: 'Berhasil',
+          text: 'Hasil pencacahan berhasil diunduh',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      }
+    });
+  };
+
+  // Fungsi badge modern
+  // const StatusBadge = ({ status }: { status: string }) => {
+  //   const base = 'px-3 py-1 rounded-full text-sm font-medium';
+  //   const style = status === 'Diterima' ? 'bg-green-100 text-green-700' : status === 'Ditolak' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700';
+  //   return <span className={`${base} ${style}`}>{status}</span>;
   // };
 
-  // Fungsi untuk mengubah status
-  // const handleStatusChange = (id: number, newStatus: string) => {
-  //   const updatedData = data.map((item) => (item.id === id ? { ...item, status: newStatus } : item));
-  //   setData(updatedData);
-  // };
-
-  // Definisi kolom untuk `react-table`
-  const columns: Column<SubmissionData>[] = [
+  const columns: any[] = [
     {
       Header: 'Timestamp',
       accessor: 'timestamp',
+      Cell: ({ value }: any) => <span className="text-gray-700">{value}</span>,
     },
-
     {
       Header: 'Submitter',
       accessor: 'submitter',
+      Cell: ({ value }: any) => <span className="font-medium text-gray-800">{value}</span>,
     },
     {
       Header: 'Label Rumah Tangga',
       accessor: 'labelRumahTangga',
+      Cell: ({ value }: any) => <span className="text-gray-700">{value}</span>,
     },
     // {
     //   Header: 'Status',
     //   accessor: 'status',
-    //   Cell: ({ row }: any) => {
-    //     const { id, status } = row.original;
-    //     return (
-    //       <div className={`dropdown dropdown-hover ${id === 1 ? 'dropdown-end' : 'dropdown-top'}`}>
-    //         <label tabIndex={0} className={`btn ${getStatusClass(status)} btn-sm btn-outline bg-white`}>
-    //           {status}
-    //         </label>
-    //         <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52  overflow-y-auto">
-    //           {['Diterima', 'Bermasalah', 'Diubah', 'Ditolak', 'Diapprove'].map((newStatus) => (
-    //             <li key={newStatus}>
-    //               <button className="btn btn-ghost btn-sm " onClick={() => handleStatusChange(id, newStatus)}>
-    //                 {newStatus}
-    //               </button>
-    //             </li>
-    //           ))}
-    //         </ul>
-    //       </div>
-    //     );
-    //   },
+    //   Cell: ({ value }: any) => <StatusBadge status={value} />,
     // },
     // {
     //   Header: 'Aksi',
     //   accessor: 'id',
-    //   Cell: ({ row }: any) => {
-    //     return (
-    //       <button className="btn lg:btn-sm btn-md font-semibold btn-primary ">
-    //         Lihat
-    //         <FaEye className="text-lg" />
-    //       </button>
-    //     );
-    //   },
+    //   Cell: () => (
+    //     <button className="btn btn-sm btn-outline rounded-lg flex items-center gap-2 hover:bg-gray-100">
+    //       <FaEye className="text-base" />
+    //       Lihat
+    //     </button>
+    //   ),
     // },
   ];
 
   return (
-    <div className="">
-      <h1 className="text-2xl font-bold mb-2">Hasil Pencacahan</h1>
-      <div className="breadcrumbs text-sm mb-2">
-        <ul>
-          <li>
-            <a href="/">Dashboard</a>
-          </li>
-          <li>
-            <a href="/webmon/hasil">Hasil Pencacahan</a>
-          </li>
-        </ul>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-semibold text-gray-800">Hasil Pencacahan</h1>
+        <div className="breadcrumbs text-sm mt-1 text-gray-500">
+          <ul>
+            <li>
+              <a href="/" className="hover:text-gray-700">
+                Dashboard
+              </a>
+            </li>
+            <li className="font-medium text-gray-700">Hasil Pencacahan</li>
+          </ul>
+        </div>
       </div>
 
-      <hr className="w-full border-t-[1.7px] border-slate-300 mb-4" />
+      {/* Card Tabel */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-medium text-gray-800">Daftar Hasil</h2>
 
-      <TableComponent<SubmissionData> columns={columns} data={data} isDownloadable={true} />
+          {/* Tombol Download Modern */}
+          <button onClick={handleDownload} className="btn btn-sm btn-primary rounded-lg flex items-center gap-2 hover:bg-gray-100">
+            <FaDownload className="text-base" />
+            Download
+          </button>
+        </div>
+
+        <TableComponent<SubmissionData> columns={columns} data={data} />
+      </div>
     </div>
   );
 };

@@ -48,7 +48,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center max-h-screen ">
-      <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
+      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-xl">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         <form onSubmit={handleLoginByPass} className="space-y-4">
           <div className="form-control">
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
           </button>
         </form>
         <div className="text-center mt-4">
-          <a href="/forgot-password" className="text-sm btn btn-secondary w-full hover:underline">
+          <a href="/webmon/forgot-password" className="text-sm text-gray-600 hover:text-primary transition-colors duration-200 hover:underline">
             Lupa Password?
           </a>
         </div>

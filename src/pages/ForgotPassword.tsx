@@ -60,7 +60,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center max-h-screen">
-      <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg ">
+      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-xl ">
         <h1 className="text-2xl font-bold text-center mb-6">Lupa Password</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-control">

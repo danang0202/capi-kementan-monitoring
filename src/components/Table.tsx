@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useTable, usePagination, useGlobalFilter, useFilters, useSortBy, Column } from 'react-table';
-import { FaSortUp, FaSortDown, FaSort, FaDownload } from 'react-icons/fa';
-import Alert from './Alert';
+import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
 
-// Komponen untuk input pencarian dengan rekomendasi
+// Komponen input dengan suggestions
 const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestions, setInputValue }: { globalFilter: string; setGlobalFilter: (filter: string) => void; suggestions: string[]; setInputValue: (value: string) => void }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -18,10 +17,10 @@ const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestion
         }}
         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
         placeholder="Cari data..."
-        className="input input-bordered w-full mb-4"
+        className="input input-bordered w-full mb-3 border-gray-300 bg-white text-gray-700 placeholder-gray-400 text-sm shadow-sm focus:ring-1 focus:ring-primary focus:border-primary transition"
       />
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute bg-white border rounded-md shadow-md w-full z-10">
+        <ul className="absolute bg-white border border-gray-200 rounded-md shadow-md w-full z-10 max-h-52 overflow-y-auto text-sm">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -30,7 +29,7 @@ const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestion
                 setInputValue(suggestion);
                 setShowSuggestions(false);
               }}
-              className="p-2 hover:bg-gray-200 cursor-pointer"
+              className="p-2 hover:bg-primary/10 cursor-pointer transition"
             >
               {suggestion}
             </li>
@@ -44,16 +43,14 @@ const GlobalFilterWithSuggestions = ({ globalFilter, setGlobalFilter, suggestion
 interface TableProps<T extends object> {
   columns: Column<T>[];
   data: T[];
-  downloadUrl?: string; // URL untuk mengunduh data (jika ada)
-  isDownloadable?: boolean; // Menentukan apakah tombol unduh ditampilkan
 }
 
-const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownloadable }: TableProps<T>) => {
+const TableComponent = <T extends object>({ columns, data }: TableProps<T>) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setGlobalFilter, state, setPageSize } = useTable(
+  const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setGlobalFilter, state, setPageSize } = useTable(
     {
       columns,
       data,
@@ -67,7 +64,6 @@ const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownlo
 
   const { globalFilter, pageIndex } = state;
 
-  // Membuat rekomendasi berdasarkan input
   const updateSuggestions = (value: string) => {
     if (!value) {
       setSuggestions([]);
@@ -78,36 +74,10 @@ const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownlo
     setSuggestions(filteredSuggestions);
   };
 
-  const { showConfirmation, showAlert } = Alert();
-
-  const handleDownload = () => {
-    showConfirmation({
-      title: 'Konfirmasi Unduh',
-      text: 'Apakah Anda yakin ingin mengunduh data ini?',
-      icon: 'warning',
-      confirmButtonText: 'Ya, Unduh',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        showAlert({
-          title: 'Berhasil',
-          text: 'Hasil pencacahan berhasil diunduh',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-        // if (downloadUrl) {
-        //   window.location.href = downloadUrl;
-        // } else {
-        //   console.error('URL unduh tidak tersedia.');
-        // }
-      }
-    });
-  };
-
   return (
-    <div className="overflow-x-auto overflow-y-auto w-full">
+    <div className="overflow-x-auto w-full bg-white rounded-md shadow-md p-3">
       {/* Input Pencarian */}
-      <div className="md:flex justify-between max-md:space-y-2 w-full">
+      <div className="md:flex justify-between max-md:space-y-2 w-full mb-3">
         <div className="flex flex-1 w-full">
           <GlobalFilterWithSuggestions
             globalFilter={globalFilter}
@@ -121,7 +91,7 @@ const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownlo
         </div>
         <div className="flex flex-wrap max-xs:space-y-2">
           <select
-            className={`select select-bordered ${isDownloadable ? 'ml-2' : ''}`}
+            className="select select-bordered border-gray-300 bg-white text-gray-700 shadow-sm text-sm focus:ring-1 focus:ring-primary focus:border-primary transition"
             value={rowsPerPage}
             onChange={(e) => {
               setPageSize(Number(e.target.value));
@@ -134,36 +104,42 @@ const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownlo
               </option>
             ))}
           </select>
-
-          {isDownloadable && (
-            <button onClick={handleDownload} className="btn btn-primary btn-md mx-2 ">
-              Unduh hasil <FaDownload className="text-sm" />
-            </button>
-          )}
         </div>
       </div>
 
       {/* Tabel */}
-      <table {...getTableProps()} className="table table-zebra w-full  rounded-md shadow-md">
-        <thead>
+      <table {...getTableProps()} className="table-auto w-full border-collapse rounded-md shadow-sm text-sm">
+        <thead className="bg-gray-50">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  <span className="">{column.isSorted ? column.isSortedDesc ? <FaSortDown className="inline-block" /> : <FaSortUp className="inline-block" /> : <FaSort className="inline-block" />}</span>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())} className="px-3 py-2 text-left text-gray-700 font-medium border-b border-gray-200 bg-gray-100 rounded-sm select-none">
+                  <div className="flex items-center gap-1">
+                    {column.render('Header')}
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <FaSortDown className="inline-block text-gray-500 text-xs" />
+                      ) : (
+                        <FaSortUp className="inline-block text-gray-500 text-xs" />
+                      )
+                    ) : (
+                      <FaSort className="inline-block text-gray-300 text-xs" />
+                    )}
+                  </div>
                 </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className="divide-y divide-gray-200">
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()} className="hover:bg-gray-50 transition">
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  <td {...cell.getCellProps()} className="px-3 py-2 text-gray-700 text-sm text-start">
+                    {cell.render('Cell')}
+                  </td>
                 ))}
               </tr>
             );
@@ -171,27 +147,24 @@ const TableComponent = <T extends object>({ columns, data, downloadUrl, isDownlo
         </tbody>
       </table>
 
-      {/* Kontrol Pagination */}
-      <div className="xs:flex max-md:space-y-2 mx-auto block justify-between items-center mt-4">
-        <div>
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
+      {/* Pagination */}
+      <div className="flex flex-col xs:flex-row max-md:space-y-2 justify-between items-center mt-3 text-sm">
+        <div className="flex gap-1">
+          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className="bg-primary text-white rounded-md px-3 py-2 hover:brightness-90 transition disabled:opacity-50">
             {'<<'}
           </button>
-          <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-primary text-white rounded-md px-3 py-2 hover:brightness-90 transition disabled:opacity-50">
             {'<'}
           </button>
-          <button onClick={() => nextPage()} disabled={!canNextPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => nextPage()} disabled={!canNextPage} className="bg-primary text-white rounded-md px-3 py-2 hover:brightness-90 transition disabled:opacity-50">
             {'>'}
           </button>
-          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className="bg-primary rounded-md md:py-2 md:px-3 py-1 px-2 text-base text-white hover:brightness-90 font-semibold mx-1">
+          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className="bg-primary text-white rounded-md px-3 py-2 hover:brightness-90 transition disabled:opacity-50">
             {'>>'}
           </button>
         </div>
-        <div className="text-end">
-          Halaman{' '}
-          <strong>
-            {pageIndex + 1} dari {pageOptions.length}
-          </strong>
+        <div className="text-gray-700 mt-1 xs:mt-0">
+          Halaman <strong>{pageIndex + 1}</strong> dari <strong>{pageOptions.length}</strong>
         </div>
       </div>
     </div>
