@@ -127,7 +127,7 @@ const Hasil: React.FC = () => {
           <h2 className="text-lg font-medium text-gray-800">Daftar Hasil</h2>
 
           {/* Tombol Download Modern */}
-          <button onClick={handleDownload} className="btn btn-sm btn-primary rounded-lg flex items-center gap-2 hover:bg-gray-100">
+          <button onClick={handleDownload} className="btn btn-sm btn-primary rounded-lg flex items-center gap-2 hover:bg-gray-100 hover:text-primary">
             <FaDownload className="text-base" />
             Download
           </button>
