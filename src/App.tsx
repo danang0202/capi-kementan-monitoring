@@ -1,29 +1,28 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/Not_Found';
-import Progress from './pages/ProgressPetugas';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Hasil from './pages/Hasil';
 import MainLayout from './layouts/MainLayout';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import ProgressPetugas from './pages/ProgressPetugas';
 import ProgressWilayah from './pages/ProgressWilayah';
 
 // Komponen untuk proteksi rute
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+// const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+//   const { isAuthenticated, isLoading } = useAuth();
 
-  if (isLoading) {
-    // Tampilkan indikator loading saat autentikasi diperiksa
-    return <div className="flex justify-center items-center h-screen loading-bars bg-white "></div>;
-  }
+//   if (isLoading) {
+//     // Tampilkan indikator loading saat autentikasi diperiksa
+//     return <div className="flex justify-center items-center h-screen loading-bars bg-white "></div>;
+//   }
 
-  return !isAuthenticated ? <Navigate to={'/login'} /> : children;
-};
+//   return !isAuthenticated ? <Navigate to={'/login'} /> : children;
+// };
 
 const AppContent: React.FC = () => {
   const location = useLocation();
