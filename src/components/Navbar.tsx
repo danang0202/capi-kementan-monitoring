@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import { RiProfileLine } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
@@ -13,7 +13,8 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+  const { logout } = { logout: () => (window.location.href = '/webmon/login') }; // Placeholder if useAuth is not available
 
   const handleLogout = () => {
     logout();

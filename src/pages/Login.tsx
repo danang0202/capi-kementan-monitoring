@@ -1,51 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const { login, isAuthenticated } = useAuth();
+  // const { login, isAuthenticated } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Login Berhasil',
-        text: 'Login sukses, Anda akan diarahkan ke halaman Dashboard',
-      }).then(() => navigate('/'));
-    }
-  });
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     Swal.fire({
+  //       icon: 'success',
+  //       title: 'Login Berhasil',
+  //       text: 'Login sukses, Anda akan diarahkan ke halaman Dashboard',
+  //     }).then(() => navigate('/'));
+  //   }
+  // });
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      // Panggil fungsi login
-      await login(username, password);
-    } catch (err: any) {
-      // Jika gagal, tampilkan pesan error yang relevan
-      Swal.fire({
-        icon: 'error',
-        title: 'Login Gagal',
-        text: err.message || 'Username atau Password salah',
-      });
-    }
-  };
+  // const handleLogin = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     // Panggil fungsi login
+  //     await login(username, password);
+  //   } catch (err: any) {
+  //     // Jika gagal, tampilkan pesan error yang relevan
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Login Gagal',
+  //       text: err.message || 'Username atau Password salah',
+  //     });
+  //   }
+  // };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleLoginByPass = (e: React.FormEvent) => {
+    e.preventDefault();
+    window.location.href = '/';
   };
 
   return (
     <div className="flex justify-center items-center max-h-screen ">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLoginByPass} className="space-y-4">
           <div className="form-control">
             <label className="label">
               <span className="label-text">Username</span>

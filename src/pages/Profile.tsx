@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash, FaUser } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 import { usePassword } from '../hooks/usePassword';
 import Swal from 'sweetalert2';
+import user from '../data/dummyUser';
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'details' | 'password'>('details');
@@ -16,7 +17,6 @@ const Profile: React.FC = () => {
     newPass: '',
     confirmPass: '',
   });
-  const { user } = useAuth();
   const { updatePassword } = usePassword();
 
   const handleTabChange = (tab: 'details' | 'password') => {
