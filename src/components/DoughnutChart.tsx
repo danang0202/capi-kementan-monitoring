@@ -1,20 +1,12 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { DoughnutChartProps, tooltipItem } from '../types/Chart';
 
 // Registrasi komponen Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // Props untuk komponen chart (opsional)
-interface DoughnutChartProps {
-  dataCacah: number;
-  dataBelumCacah: number;
-}
-
-type tooltipItem = {
-  label: string;
-  raw: number;
-};
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({ dataCacah, dataBelumCacah }) => {
   // Data chart

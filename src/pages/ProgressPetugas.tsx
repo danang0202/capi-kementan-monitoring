@@ -2,20 +2,7 @@ import React from 'react';
 import TableComponent from '../components/Table';
 import ProgressBar from '../components/ProgressBar';
 import { Progress as ProgressDataSource } from '../data/progress';
-
-interface ProgressData {
-  name: string;
-  value: number;
-  max: number;
-}
-
-interface ProgressItem {
-  nomer: number;
-  data: ProgressData;
-  name: string;
-  value: number;
-  max: number;
-}
+import { ProgressItem } from '../types/Progress';
 
 const ProgressPetugas: React.FC = () => {
   const columns = React.useMemo(

@@ -2,46 +2,11 @@ import React, { useState } from 'react';
 import TableComponent from '../components/Table';
 import { FaEye, FaDownload } from 'react-icons/fa';
 import Alert from '../components/Alert';
-
-interface SubmissionData {
-  id: number;
-  timestamp: string;
-  submitter: string;
-  labelRumahTangga: string;
-  status: string;
-}
+import { SubmissionData } from '../types/Submission';
+import { hasilData } from '../data/hasil';
 
 const Hasil: React.FC = () => {
-  const [data] = useState<SubmissionData[]>([
-    {
-      id: 1,
-      timestamp: '3 Mar 2024, 06:15:51',
-      submitter: 'IRSYAD FADHIL ASYRAF',
-      labelRumahTangga: 'PEMECUTAN_KLOD.064B.33',
-      status: 'Ditolak',
-    },
-    {
-      id: 2,
-      timestamp: '3 Mar 2024, 01:22:35',
-      submitter: 'IRSYAD FADHIL ASYRAF',
-      labelRumahTangga: 'KARANGASEM.002B.14',
-      status: 'Diterima',
-    },
-    {
-      id: 3,
-      timestamp: '3 Mar 2024, 01:22:35',
-      submitter: 'IRSYAD FADHIL ASYRAF',
-      labelRumahTangga: 'KARANGASEM.002B.14',
-      status: 'Diterima',
-    },
-    {
-      id: 4,
-      timestamp: '3 Mar 2024, 01:22:35',
-      submitter: 'IRSYAD FADHIL ASYRAF',
-      labelRumahTangga: 'KARANGASEM.002B.14',
-      status: 'Diterima',
-    },
-  ]);
+  const [data] = useState<SubmissionData[]>(hasilData);
 
   const { showConfirmation, showAlert } = Alert();
 
