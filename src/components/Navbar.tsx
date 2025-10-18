@@ -38,7 +38,10 @@ const Navbar: React.FC = () => {
       <nav className="navbar fixed top-0 w-full z-20 bg-base-100/70 backdrop-blur-md border-b border-base-300/50 shadow-sm px-4 lg:px-56">
         <div className="flex-1 flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2">
-            <img src="/webmon/public/logo kementan.png" alt="logo kementan" height={45} width={45} />
+            {/* when in vercel */}
+            {/* <img src="/webmon/public/logo_kementan.png" alt="logo kementan" height={45} width={45} /> */}
+            {/* when in local */}
+            <img src="/webmon/public/logo_kementan.png" alt="logo kementan" height={45} width={45} />
             <div className="hidden md:block leading-tight">
               <p className="font-bold text-lg">Monitoring Survei</p>
               <p className="text-xs">Kementrian Pertanian RI</p>
