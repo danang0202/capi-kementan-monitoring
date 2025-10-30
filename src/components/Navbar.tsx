@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
             {/* when in vercel */}
             {/* <img src="/webmon/public/logo_kementan.png" alt="logo kementan" height={45} width={45} /> */}
             {/* when in local */}
-            <img src="/webmon/public/logo_kementan.png" alt="logo kementan" height={45} width={45} />
+            <img src="/logo_kementan.png" alt="logo kementan" height={45} width={45} />
             <div className="hidden md:block leading-tight">
               <p className="font-bold text-lg">Monitoring Survei</p>
               <p className="text-xs">Kementrian Pertanian RI</p>
