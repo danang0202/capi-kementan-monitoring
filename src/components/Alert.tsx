@@ -1,16 +1,6 @@
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-
-type AlertOptions = {
-  title: string;
-  text: string;
-  icon: 'success' | 'error' | 'warning' | 'info' | 'question';
-  confirmButtonText: string;
-};
-
-type ConfirmationOptions = AlertOptions & {
-  cancelButtonText: string;
-};
+import { AlertOptions, ConfirmationOptions } from '../types/Alert';
 
 const Alert = () => {
   const showAlert = ({ title, text, icon, confirmButtonText }: AlertOptions): Promise<SweetAlertResult<any>> => {
